@@ -39,3 +39,8 @@ Site
 - [Installation Guide for Keycloak (macOS)](https://blog.devops.dev/installation-guide-for-keycloak-macos-c17a111bfdff)
 - [Stackoverflow - Implement custom SPI in Keycloak by Azdy](https://stackoverflow.com/questions/62672377/implement-custom-spi-in-keycloak)
 - [Service Provider Interfaces (SPI)](https://www.keycloak.org/docs/latest/server_development/#_providers)
+
+- Next Steps
+1 - create a rest application
+2 - integration test with custom spi
+   
