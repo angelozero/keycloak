@@ -28,3 +28,14 @@ Site
     - to run on a MacOs Sonoma 14.2.1 Apple M1 add "--platform=linux/amd64"
     - docker run --platform=linux/amd64 -p 8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.1.4 start-dev
         - solution found by GabaGabaDev on question [Stackoverflow - M1 mac cannot run jboss/keycloak docker image](https://stackoverflow.com/questions/67044893/m1-mac-cannot-run-jboss-keycloak-docker-image)
+
+- Para copiar o jar para dentro da pasta providers
+    - docker ps e copiar o nome do container Ex.: clever_meitner
+    - dentro da pasta com o jar criado digite o comando 
+        - docker cp keycloak-custom-auth.jar clever_meitner:/opt/keycloak/providers
+        - docker exec -it clever_meitner /opt/keycloak/bin/kc.sh build
+        - docker exec -it clever_meitner /opt/keycloak/bin/kc.sh start-dev --http-port 8181
+
+- [Installation Guide for Keycloak (macOS)](https://blog.devops.dev/installation-guide-for-keycloak-macos-c17a111bfdff)
+- [Stackoverflow - Implement custom SPI in Keycloak by Azdy](https://stackoverflow.com/questions/62672377/implement-custom-spi-in-keycloak)
+- [Service Provider Interfaces (SPI)](https://www.keycloak.org/docs/latest/server_development/#_providers)
