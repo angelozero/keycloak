@@ -34,3 +34,7 @@ build/
 .mvn/
 mvnw
 mvnw.cmd
+
+.DS_Store
+keycloak-custom-spi/.DS_Store
+keycloak-custom-spi/.gitignore
