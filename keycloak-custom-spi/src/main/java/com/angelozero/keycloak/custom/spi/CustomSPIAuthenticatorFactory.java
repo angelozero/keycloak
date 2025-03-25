@@ -26,7 +26,7 @@ public class CustomSPIAuthenticatorFactory implements AuthenticatorFactory {
 
     @Override
     public String getDisplayType() {
-        return "Custom IP Authenticator";
+        return "AngeloZero Custom SPI Authenticator";
     }
 
     @Override

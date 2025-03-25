@@ -1,4 +1,4 @@
-package com.angelozero.keycloak.custom.spi.dto;
+package com.angelozero.keycloak.custom.spi;
 
 import org.bson.Document;
 

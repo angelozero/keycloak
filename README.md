@@ -30,11 +30,11 @@ Site
         - solution found by GabaGabaDev on question [Stackoverflow - M1 mac cannot run jboss/keycloak docker image](https://stackoverflow.com/questions/67044893/m1-mac-cannot-run-jboss-keycloak-docker-image)
 
 - Para copiar o jar para dentro da pasta providers
-    - docker ps e copiar o nome do container Ex.: clever_meitner
+    - docker ps e copiar o nome do container Ex.: heuristic_golick
     - dentro da pasta com o jar criado digite o comando 
-        - docker cp keycloak-custom-auth.jar clever_meitner:/opt/keycloak/providers
-        - docker exec -it clever_meitner /opt/keycloak/bin/kc.sh build
-        - docker exec -it clever_meitner /opt/keycloak/bin/kc.sh start-dev --http-port 8181
+        - docker cp keycloak-custom-spi.jar heuristic_golick:/opt/keycloak/providers
+        - docker exec -it heuristic_golick /opt/keycloak/bin/kc.sh build
+        - docker exec -it heuristic_golick /opt/keycloak/bin/kc.sh start-dev --http-port 8080
 
 - [Installation Guide for Keycloak (macOS)](https://blog.devops.dev/installation-guide-for-keycloak-macos-c17a111bfdff)
 - [Stackoverflow - Implement custom SPI in Keycloak by Azdy](https://stackoverflow.com/questions/62672377/implement-custom-spi-in-keycloak)

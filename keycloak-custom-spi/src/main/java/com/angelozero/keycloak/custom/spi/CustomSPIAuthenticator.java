@@ -1,10 +1,7 @@
 package com.angelozero.keycloak.custom.spi;
 
-import com.angelozero.keycloak.custom.spi.database.MongoDBConnection;
-import com.angelozero.keycloak.custom.spi.dto.User;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import jakarta.ws.rs.core.MultivaluedMap;
 import org.bson.Document;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.AuthenticationFlowError;
@@ -12,7 +9,6 @@ import org.keycloak.authentication.Authenticator;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
-import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,19 +26,19 @@ public class CustomSPIAuthenticator implements Authenticator {
     @Override
     public void authenticate(AuthenticationFlowContext context) {
 
-        var email = context.getHttpRequest().getDecodedFormParameters().getFirst("email");
-        var password = context.getHttpRequest().getDecodedFormParameters().getFirst("password");
+        String email = context.getHttpRequest().getDecodedFormParameters().getFirst("email");
+        String password = context.getHttpRequest().getDecodedFormParameters().getFirst("password");
 
-        var database = mongoDBConnection.getDatabase();
-        var collection = database.getCollection("users");
+        MongoDatabase database = mongoDBConnection.getDatabase();
+        MongoCollection<Document> collection = database.getCollection("users");
 
-        var userDoc = collection.find(eq("email", email)).first();
+        Document userDoc = collection.find(eq("email", email)).first();
 
         if (userDoc != null) {
-            var user = User.fromDocument(userDoc);
+            User user = User.fromDocument(userDoc);
             //if (BCrypt.checkpw(password, user.passwordHash())) {
             if (password.equals(user.passwordHash())) {
-                var keycloakUser = context.getSession().users().addUser(context.getRealm(), user.email());
+                UserModel keycloakUser = context.getSession().users().addUser(context.getRealm(), user.email());
                 keycloakUser.setFirstName(user.name());
                 keycloakUser.setEmail(user.email());
                 context.setUser(keycloakUser);
