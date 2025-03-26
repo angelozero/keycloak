@@ -29,6 +29,10 @@ Site
     - docker run --platform=linux/amd64 -p 8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.1.4 start-dev
         - solution found by GabaGabaDev on question [Stackoverflow - M1 mac cannot run jboss/keycloak docker image](https://stackoverflow.com/questions/67044893/m1-mac-cannot-run-jboss-keycloak-docker-image)
 
+- Subir postgresql via docker
+  - docker pull postgres --platform=linux/amd64 
+  - docker run --platform=linux/amd64 -p 5432:5432 -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin postgres
+
 - Para copiar o jar para dentro da pasta providers
     - docker ps e copiar o nome do container Ex.: heuristic_golick
     - dentro da pasta com o jar criado digite o comando 
