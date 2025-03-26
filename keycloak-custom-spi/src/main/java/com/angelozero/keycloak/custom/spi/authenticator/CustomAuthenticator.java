@@ -17,22 +17,38 @@ public class CustomAuthenticator implements Authenticator {
 
     @Override
     public void authenticate(AuthenticationFlowContext context) {
-        var email = context.getHttpRequest().getDecodedFormParameters().getFirst("email");
+        var username = context.getHttpRequest().getDecodedFormParameters().getFirst("username");
+        LOGGER.info("\nUSER_NAME ---> {}", username);
+
         var password = context.getHttpRequest().getDecodedFormParameters().getFirst("password");
+        LOGGER.info("\nPASSWORD ---> {}\n", password);
 
         try {
+            LOGGER.info("\nRealizando consulta Postgres\n");
             Connection connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/postgres", "admin", "admin");
+                    "jdbc:postgresql://postgres_container:5432/postgres", "admin", "admin");
 
-            var sqlQuery = "SELECT * FROM user WHERE email = ? AND password = ?";
+            var sqlQuery = "SELECT * FROM public.user WHERE email = ? AND password = ?";
+
             var statement = connection.prepareStatement(sqlQuery);
-            statement.setString(1, email);
+
+            statement.setString(1, username);
             statement.setString(2, password);
 
             var resultSet = statement.executeQuery();
 
+            LOGGER.info("\nConsulta Postgres realizada com sucesso!\n");
+
             if (resultSet.next()) {
-                var user = context.getSession().users().addUser(context.getRealm(), email);
+
+                LOGGER.info("\nUsuário encontrado com sucesso!\n");
+                LOGGER.info("ID -------- {}", resultSet.getInt("id"));
+                LOGGER.info("NOME ------ {}", resultSet.getString("name"));
+                LOGGER.info("EMAIL ----- {}", resultSet.getString("email"));
+                LOGGER.info("PASSWORD -- {}\n", resultSet.getString("password"));
+
+                var user = context.getSession().users().addUser(context.getRealm(), username);
+
                 user.setEnabled(true);
                 context.setUser(user);
                 context.success();
