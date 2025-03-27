@@ -47,10 +47,10 @@ public class CustomAuthenticator implements Authenticator {
                 LOGGER.info("EMAIL ----- {}", resultSet.getString("email"));
                 LOGGER.info("PASSWORD -- {}\n", resultSet.getString("password"));
 
-                var user = context.getSession().users().addUser(context.getRealm(), username);
-
-                user.setEnabled(true);
-                context.setUser(user);
+//                var user = context.getSession().users().addUser(context.getRealm(), username);
+//
+//                user.setEnabled(true);
+//                context.setUser(user);
                 context.success();
 
             } else {
