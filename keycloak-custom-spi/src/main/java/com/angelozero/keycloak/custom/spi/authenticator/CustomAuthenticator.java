@@ -1,72 +1,91 @@
 package com.angelozero.keycloak.custom.spi.authenticator;
 
+import com.angelozero.keycloak.custom.spi.authenticator.repository.UserPostgresRepository;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.authentication.Authenticator;
+import org.keycloak.events.Details;
+import org.keycloak.events.EventType;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserModel;
+import org.keycloak.models.utils.FormMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
 
 public class CustomAuthenticator implements Authenticator {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticator.class);
 
+    public static final String PROVIDER_ID = "angelo-zero-custom-authenticator-id";
+    public static final String VERIFY_USERNAME_FORM = "verify-username.ftl";
+    public static final String EMAIL_NOT_FOUND = "emailNotFoundMessage";
+
     @Override
     public void authenticate(AuthenticationFlowContext context) {
-        var username = context.getHttpRequest().getDecodedFormParameters().getFirst("username");
-        LOGGER.info("\nUSER_NAME ---> {}", username);
-
-        var password = context.getHttpRequest().getDecodedFormParameters().getFirst("password");
-        LOGGER.info("\nPASSWORD ---> {}\n", password);
-
-        try {
-            LOGGER.info("\nRealizando consulta Postgres\n");
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:postgresql://postgres_container:5432/postgres", "admin", "admin");
-
-            var sqlQuery = "SELECT * FROM public.user WHERE email = ? AND password = ?";
-
-            var statement = connection.prepareStatement(sqlQuery);
-
-            statement.setString(1, username);
-            statement.setString(2, password);
-
-            var resultSet = statement.executeQuery();
-
-            LOGGER.info("\nConsulta Postgres realizada com sucesso!\n");
-
-            if (resultSet.next()) {
-
-                LOGGER.info("\nUsuário encontrado com sucesso!\n");
-                LOGGER.info("ID -------- {}", resultSet.getInt("id"));
-                LOGGER.info("NOME ------ {}", resultSet.getString("name"));
-                LOGGER.info("EMAIL ----- {}", resultSet.getString("email"));
-                LOGGER.info("PASSWORD -- {}\n", resultSet.getString("password"));
-
-//                var user = context.getSession().users().addUser(context.getRealm(), username);
-//
-//                user.setEnabled(true);
-//                context.setUser(user);
-                context.success();
-
-            } else {
-                LOGGER.error("Usuário não foi encontrado - Acesso Negado");
-                context.failure(AuthenticationFlowError.ACCESS_DENIED);
-            }
-
-        } catch (Exception ex) {
-            LOGGER.error("Falha ao se autenticar: {}", ex.getMessage());
-            context.failure(AuthenticationFlowError.ACCESS_DENIED);
-        }
+        var challenge = context.form().createForm(VERIFY_USERNAME_FORM);
+        context.challenge(challenge);
     }
 
     @Override
-    public void action(AuthenticationFlowContext authenticationFlowContext) {
+    public void action(AuthenticationFlowContext context) {
+        var email = context.getHttpRequest().getDecodedFormParameters().getFirst("username");
+        LOGGER.info("\nUSER_NAME ---> {}", email);
 
+        var password = context.getHttpRequest().getDecodedFormParameters().getFirst("password");
+        LOGGER.info("\nPASSWORD ---> {}", password);
+
+        var user = UserPostgresRepository.getInstance().findByEmailAndPassword(email, password);
+
+        try {
+            if (user != null) {
+                var session = context.getSession();
+                var realm = context.getRealm();
+                var sessionUser = session.users().addUser(realm, email);
+
+                sessionUser.setEnabled(true);
+                sessionUser.setEmail(user.email());
+                sessionUser.setFirstName(user.firstName());
+                sessionUser.setLastName(user.lastName());
+
+                context.setUser(sessionUser);
+
+                context.getEvent().user(sessionUser);
+                context.getEvent().success();
+                context.newEvent().event(EventType.LOGIN);
+
+                context.getEvent().client(context.getAuthenticationSession().getClient().getClientId())
+                        .detail(Details.REDIRECT_URI, context.getAuthenticationSession().getRedirectUri())
+                        .detail(Details.AUTH_METHOD, context.getAuthenticationSession().getProtocol());
+
+                var authType = context.getAuthenticationSession().getAuthNote(Details.AUTH_TYPE);
+
+                if (authType != null) {
+                    context.getEvent().detail(Details.AUTH_TYPE, authType);
+                }
+
+                var hashPassword = UserCredentialModel.password(user.getHashPassword(), Boolean.FALSE);
+
+                // todo: userCredentialManager() v 19.x.x is deprecated / v 2x.x.x was removed
+                session.userCredentialManager().updateCredential(realm, sessionUser, hashPassword);
+                sessionUser.addRequiredAction(UserModel.RequiredAction.UPDATE_PASSWORD);
+
+                LOGGER.info("\nUser authenticated with success");
+                context.success();
+
+            } else {
+                LOGGER.error("\nUser not found - Invalid User");
+                var response = context.form()
+                        .addError(new FormMessage(EMAIL_NOT_FOUND))
+                        .createForm(VERIFY_USERNAME_FORM);
+
+                context.failureChallenge(AuthenticationFlowError.INVALID_USER, response);
+            }
+
+        } catch (Exception ex) {
+            LOGGER.error("User authentication failed - Access Denied - Error: {}", ex.getMessage());
+            context.failure(AuthenticationFlowError.ACCESS_DENIED);
+        }
     }
 
     @Override

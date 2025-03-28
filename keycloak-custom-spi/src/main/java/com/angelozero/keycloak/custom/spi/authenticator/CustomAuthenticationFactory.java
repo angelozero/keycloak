@@ -8,9 +8,26 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderConfigProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomAuthenticationFactory implements AuthenticatorFactory {
+
+    private static final CustomAuthenticator CUSTOM_AUTHENTICATOR_INSTANCE = new CustomAuthenticator();
+
+    @Override
+    public Authenticator create(KeycloakSession keycloakSession) {
+        return CUSTOM_AUTHENTICATOR_INSTANCE;
+    }
+
+    @Override
+    public AuthenticationExecutionModel.Requirement[] getRequirementChoices() {
+        return new AuthenticationExecutionModel.Requirement[]{
+                AuthenticationExecutionModel.Requirement.REQUIRED,
+                AuthenticationExecutionModel.Requirement.DISABLED
+        };
+    }
+
     @Override
     public String getDisplayType() {
         return "AngeloZero - Custom Authentication";
@@ -23,12 +40,7 @@ public class CustomAuthenticationFactory implements AuthenticatorFactory {
 
     @Override
     public boolean isConfigurable() {
-        return false;
-    }
-
-    @Override
-    public AuthenticationExecutionModel.Requirement[] getRequirementChoices() {
-        return new AuthenticationExecutionModel.Requirement[]{AuthenticationExecutionModel.Requirement.REQUIRED};
+        return true;
     }
 
     @Override
@@ -43,13 +55,24 @@ public class CustomAuthenticationFactory implements AuthenticatorFactory {
 
     @Override
     public List<ProviderConfigProperty> getConfigProperties() {
-        return List.of();
+        final List<ProviderConfigProperty> configProperties = new ArrayList<>();
+        ProviderConfigProperty property = new ProviderConfigProperty();
+        property.setName("external.url");
+        property.setLabel("External service base url");
+        property.setType(ProviderConfigProperty.STRING_TYPE);
+        property.setHelpText("Base url for the external service base url");
+        configProperties.add(property);
+
+        property = new ProviderConfigProperty();
+        property.setName("external.url.client");
+        property.setLabel("External service client");
+        property.setType(ProviderConfigProperty.STRING_TYPE);
+        property.setHelpText("External service client id");
+        configProperties.add(property);
+
+        return configProperties;
     }
 
-    @Override
-    public Authenticator create(KeycloakSession keycloakSession) {
-        return new CustomAuthenticator();
-    }
 
     @Override
     public void init(Config.Scope scope) {
@@ -68,6 +91,6 @@ public class CustomAuthenticationFactory implements AuthenticatorFactory {
 
     @Override
     public String getId() {
-        return "custom-authenticator";
+        return CustomAuthenticator.PROVIDER_ID;
     }
 }
