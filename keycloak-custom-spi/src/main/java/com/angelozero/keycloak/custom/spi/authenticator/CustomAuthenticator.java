@@ -1,6 +1,9 @@
 package com.angelozero.keycloak.custom.spi.authenticator;
 
 import com.angelozero.keycloak.custom.spi.authenticator.repository.UserPostgresRepository;
+import org.keycloak.OAuth2Constants;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.authentication.Authenticator;
@@ -11,6 +14,7 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.models.utils.FormMessage;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +40,22 @@ public class CustomAuthenticator implements Authenticator {
         LOGGER.info("\nPASSWORD ---> {}", password);
 
         var user = UserPostgresRepository.getInstance().findByEmailAndPassword(email, password);
+
+        // Configurar
+        Keycloak keycloak = KeycloakBuilder.builder()
+                .serverUrl("")
+                .realm("")
+                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                .clientId("")
+                .clientSecret("")
+                .build();
+
+        var test = keycloak.realm("").users();
+        var responseCreate = test.create(new UserRepresentation());
+        if (responseCreate.getStatus() == 200) {
+            System.out.println("usuario criado");
+        }
+
 
         try {
             if (user != null) {

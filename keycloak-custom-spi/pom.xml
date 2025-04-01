@@ -72,6 +72,11 @@
             <version>22.0.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-admin-client</artifactId>
+            <version>22.0.1</version>
+        </dependency>
 
         <!-- jboss-logging -->
         <dependency>
