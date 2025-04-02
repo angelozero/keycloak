@@ -15,7 +15,7 @@ services:
     platform: linux/amd64
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.1.4
+    image: keycloak/keycloak:25.0.0
     container_name: keycloak_container
     networks:
       - keycloak-network
@@ -26,8 +26,12 @@ services:
       DB_DATABASE: postgres
       DB_USER: admin
       DB_PASSWORD: admin
-      KC_BOOTSTRAP_ADMIN_USERNAME: admin
-      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+#      use these parameters if your keycloak version is 26.x.x
+#      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+#      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+
     ports:
       - "8080:8080"
     platform: linux/amd64

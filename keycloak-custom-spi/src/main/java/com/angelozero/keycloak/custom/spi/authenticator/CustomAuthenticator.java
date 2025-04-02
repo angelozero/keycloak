@@ -41,22 +41,6 @@ public class CustomAuthenticator implements Authenticator {
 
         var user = UserPostgresRepository.getInstance().findByEmailAndPassword(email, password);
 
-        // Configurar
-        Keycloak keycloak = KeycloakBuilder.builder()
-                .serverUrl("")
-                .realm("")
-                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
-                .clientId("")
-                .clientSecret("")
-                .build();
-
-        var test = keycloak.realm("").users();
-        var responseCreate = test.create(new UserRepresentation());
-        if (responseCreate.getStatus() == 200) {
-            System.out.println("usuario criado");
-        }
-
-
         try {
             if (user != null) {
                 var session = context.getSession();
