@@ -1,0 +1,230 @@
+{
+	"info": {
+		"_postman_id": "74eeab20-e85f-4b55-871e-8ae1a94ebd22",
+		"name": "keycloak",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12384551"
+	},
+	"item": [
+		{
+			"name": "custom-spi",
+			"item": [
+				{
+					"name": "Authorization",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "clientSecret",
+									"value": "6dq3esSYIy6xDgZGgUHnloiNF9sXn8Zm",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "body",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "zero",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "authorization_code",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/master/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/master/protocol/openid-connect/auth",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "gauss",
+									"description": "ADMIN",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "euler",
+									"description": "USER",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "zero",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "6dq3esSYIy6xDgZGgUHnloiNF9sXn8Zm",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/realms/master/protocol/openid-connect/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"realms",
+								"master",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "rest-api",
+			"item": [
+				{
+					"name": "Hello Keycloak - Get Token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhbnA0cVFFd3NXWFpHakRndW5rblpMb080X2lndVJHUjBQZzFSVFowOVIwIn0.eyJleHAiOjE3NDM2OTk0ODgsImlhdCI6MTc0MzY5OTQyOCwianRpIjoiNzBmMTBiOTUtMGMxMy00OGE2LWI2ODAtMzRiNTdlYmYwMTFhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9tYXN0ZXIiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNzRhMzE1YjUtNTA5Yi00M2Q0LWJkYjktMjJjYzNkMjlmYTdlIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiemVybyIsInNpZCI6IjhjYWM2YTVkLWFmNmItNDMwYy1hYTZlLWIwOWNlMGIxZDU5NSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1tYXN0ZXIiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiemVybyI6eyJyb2xlcyI6WyJjbGllbnRfYWRtaW4iXX0sImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IkNhcmwgRnJpZWRyaWNoIEdhdXNzIEdhdXNzIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiZ2F1c3MiLCJnaXZlbl9uYW1lIjoiQ2FybCBGcmllZHJpY2ggR2F1c3MiLCJmYW1pbHlfbmFtZSI6IkdhdXNzIiwiZW1haWwiOiJnYXVzc0BsZGFwLmZvcnVtc3lzLmNvbSJ9.mVtcVWOOiNdlTUxjw0C75qLGerpdx5HKgb23LW_MVjz9PmS1QKaxnAGvusOrZfXWPNvsLubGhXOoY1ukp1GD-KCcsd85qkj0XSbc7e24pskeDMlcCGxvARlu3G-uoa-yqg5fRqhxmwY9VSHThiNKBjKNs1PRlDbP-HVkpj6VOZEmBuMB_1PKMrLRXsZ4PydhpqjVaIsNvqlyeSa7jS4H2MhBlhGc2urljaQg2cfJWjSES4_E2RBo332gymPofA0nZtqcljrK3MWUiLgoIh3kHA2Q4XNJedKZWJBZPHrJquAuphxu1a4Hb2-uXjd1hLV8I888HL3hcf-LghPXzrCoKw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/api/v1/keycloak/admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"v1",
+								"keycloak",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Hello Keycloak - Admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhbnA0cVFFd3NXWFpHakRndW5rblpMb080X2lndVJHUjBQZzFSVFowOVIwIn0.eyJleHAiOjE3NDM2OTk0ODgsImlhdCI6MTc0MzY5OTQyOCwianRpIjoiNzBmMTBiOTUtMGMxMy00OGE2LWI2ODAtMzRiNTdlYmYwMTFhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9tYXN0ZXIiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNzRhMzE1YjUtNTA5Yi00M2Q0LWJkYjktMjJjYzNkMjlmYTdlIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiemVybyIsInNpZCI6IjhjYWM2YTVkLWFmNmItNDMwYy1hYTZlLWIwOWNlMGIxZDU5NSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1tYXN0ZXIiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiemVybyI6eyJyb2xlcyI6WyJjbGllbnRfYWRtaW4iXX0sImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IkNhcmwgRnJpZWRyaWNoIEdhdXNzIEdhdXNzIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiZ2F1c3MiLCJnaXZlbl9uYW1lIjoiQ2FybCBGcmllZHJpY2ggR2F1c3MiLCJmYW1pbHlfbmFtZSI6IkdhdXNzIiwiZW1haWwiOiJnYXVzc0BsZGFwLmZvcnVtc3lzLmNvbSJ9.mVtcVWOOiNdlTUxjw0C75qLGerpdx5HKgb23LW_MVjz9PmS1QKaxnAGvusOrZfXWPNvsLubGhXOoY1ukp1GD-KCcsd85qkj0XSbc7e24pskeDMlcCGxvARlu3G-uoa-yqg5fRqhxmwY9VSHThiNKBjKNs1PRlDbP-HVkpj6VOZEmBuMB_1PKMrLRXsZ4PydhpqjVaIsNvqlyeSa7jS4H2MhBlhGc2urljaQg2cfJWjSES4_E2RBo332gymPofA0nZtqcljrK3MWUiLgoIh3kHA2Q4XNJedKZWJBZPHrJquAuphxu1a4Hb2-uXjd1hLV8I888HL3hcf-LghPXzrCoKw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/api/v1/keycloak/admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"v1",
+								"keycloak",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Hello Keycloak - User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhbnA0cVFFd3NXWFpHakRndW5rblpMb080X2lndVJHUjBQZzFSVFowOVIwIn0.eyJleHAiOjE3NDM2OTkzOTcsImlhdCI6MTc0MzY5OTMzNywianRpIjoiYmU0MTkzYTItZThmMi00ODVmLWE0ZDYtNDBmNDFiNWQ3Njc5IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9tYXN0ZXIiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNDA5ZTU0NWYtYTZkOS00NTNmLWI3MDQtNWQyY2FhNDY5Zjg3IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiemVybyIsInNpZCI6IjIwZDBmMDg0LTRkNDctNDkxZi1hZTc5LTQ3NDRjNGFmMGEwYiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1tYXN0ZXIiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiemVybyI6eyJyb2xlcyI6WyJjbGllbnRfdXNlciJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiTGVvbmhhcmQgRXVsZXIgRXVsZXIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJldWxlciIsImdpdmVuX25hbWUiOiJMZW9uaGFyZCBFdWxlciIsImZhbWlseV9uYW1lIjoiRXVsZXIiLCJlbWFpbCI6ImV1bGVyQGxkYXAuZm9ydW1zeXMuY29tIn0.YLgx9O9ZBk46e0PKRkh8TjUYYfOrT6bdi-bSP55mGzOaoPvqEw-bALSxhKFseW7SQJaYHuRXw_UzjtKxR3xM_FwnwiMIegNhv2bs2f15z6c9w5fcKArxg9gaTslDW6JPJ6StGxJf32iq-l_WJCgvbV2pdEFnHDAbuhyrBW5oU8FA8B6YLhOlPSM3DgwgW8m9E1emH6VwLrdeWWqOCehxfWRb_wrXKhLAj_bF1bOxP8NAFf1xbQ1Er8SY_nGTuLRagUJz9hNvX5aEs9AOqZsZcG93U1waEdoj8A69nLncZn3zhdF-hNJJnvi5OSpLm9kg7riC8EdHoV0M9587VssJdw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/api/v1/keycloak/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"v1",
+								"keycloak",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
