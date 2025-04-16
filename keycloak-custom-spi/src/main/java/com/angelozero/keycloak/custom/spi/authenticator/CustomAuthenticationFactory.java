@@ -13,6 +13,9 @@ import java.util.List;
 
 public class CustomAuthenticationFactory implements AuthenticatorFactory {
 
+    public static final String CLIENT_MASTER_ID = "CLIENT_MASTER_ID";
+    public static final String CLIENT_MASTER_ENABLE = "CLIENT_MASTER_ENABLE";
+
     private static final CustomAuthenticator CUSTOM_AUTHENTICATOR_INSTANCE = new CustomAuthenticator();
 
     @Override
@@ -56,19 +59,22 @@ public class CustomAuthenticationFactory implements AuthenticatorFactory {
     @Override
     public List<ProviderConfigProperty> getConfigProperties() {
         final List<ProviderConfigProperty> configProperties = new ArrayList<>();
-        ProviderConfigProperty property = new ProviderConfigProperty();
-        property.setName("external.url");
-        property.setLabel("External service base url");
-        property.setType(ProviderConfigProperty.STRING_TYPE);
-        property.setHelpText("Base url for the external service base url");
-        configProperties.add(property);
 
-        property = new ProviderConfigProperty();
-        property.setName("external.url.client");
-        property.setLabel("External service client");
-        property.setType(ProviderConfigProperty.STRING_TYPE);
-        property.setHelpText("External service client id");
-        configProperties.add(property);
+        ProviderConfigProperty clientMasterConfig = new ProviderConfigProperty();
+        clientMasterConfig.setName("CLIENT_MASTER_ID");
+        clientMasterConfig.setLabel("Client Master ID");
+        clientMasterConfig.setType(ProviderConfigProperty.STRING_TYPE);
+        clientMasterConfig.setHelpText("This is an information of the client master id");
+
+        ProviderConfigProperty clientMasterEnableConfig = new ProviderConfigProperty();
+        clientMasterEnableConfig = new ProviderConfigProperty();
+        clientMasterEnableConfig.setName("CLIENT_MASTER_ENABLE");
+        clientMasterEnableConfig.setLabel("Client Master enable ?");
+        clientMasterEnableConfig.setType(ProviderConfigProperty.BOOLEAN_TYPE);
+        clientMasterEnableConfig.setHelpText("his is an information of the client master enable");
+
+        configProperties.add(clientMasterConfig);
+        configProperties.add(clientMasterEnableConfig);
 
         return configProperties;
     }

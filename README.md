@@ -1,3 +1,28 @@
+# SPI Customizada para autenticação com SpringBoot, Keycloak, Docker e PostgreSQL
+
+![logo](./images/logo-keycloak-spi.jpeg)
+
+- O que é um SPI (Service Provider Interface) ? 
+  - Uma SPI é um mecanismo que permite a extensão e personalização do comportamento do Keycloak. As SPIs fornecem um conjunto de interfaces que os desenvolvedores podem implementar para adicionar novas funcionalidades ou modificar as existentes.
+
+- Neste artigo irei demonstrar como criar uma simples SPI customizada para interceptar uma autenticação. A idéia é exclusivamente para estudo e não uma solução para um "problema real".
+- O que vamos fazer no keycloack ?
+    - Criar um realm
+    - Criar um client
+    - Criar roles 
+    - Se conectar em uma base Ldap
+    - Associar os usuário da base Ldap a nossas roles
+    - Interceptar sua autenticação para registrar seus dados em uma base de dados postgres
+    - Invocar uma api rest e atraves do token gerado pelo keycloak liberar o acesso respectivo a esse usuário de acordo com seu papel (role)
+
+- Vamos interceptar uma autenticação, recuperar os dados deste usuário e tentar encontra-lo em uma base de dados postgres. Se ele existir apenas seguir com a autenticação caso contrário vamos registrar ele na nossa base de dados e assim liberar sua autenticação.
+- Após a geração do token, vamos utiliza-lo para chamar um serviço rest e tentar acessar alguns serviços sendo validados pelas roles associdadas a este usuário do LDAP.
+
+
+
+
+
+---
 Keycloak Features
 - Single Sign-On (SSO) and Single Logout
 - Identity Brokering and Social Login
