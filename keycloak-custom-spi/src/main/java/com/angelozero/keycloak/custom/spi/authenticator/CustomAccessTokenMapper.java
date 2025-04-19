@@ -60,7 +60,7 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
         var postgresUserId = findUserId(clientSessionCtx.getClientSession().getUserSession().getUser().getEmail());
         OIDCAttributeMapperHelper.mapClaim(token, mappingModel, postgresUserId);
 
-        LOGGER.info("[CustomAccessTokenMapper] - Token updated with success if \"postgres user id\": \"{}\"", postgresUserId);
+        LOGGER.info("[CustomAccessTokenMapper] - Token updated with success with \"PostgresSQL User ID\": \"{}\"", postgresUserId);
     }
 
     private Integer findUserId(String email) {

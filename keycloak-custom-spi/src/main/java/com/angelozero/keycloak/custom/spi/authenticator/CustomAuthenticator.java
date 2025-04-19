@@ -29,11 +29,11 @@ public class CustomAuthenticator implements Authenticator {
         var clientMasterEnable = context.getAuthenticatorConfig() != null ?
                 context.getAuthenticatorConfig().getConfig().get(CUSTOM_CLIENT_MASTER_ENABLE) : true;
 
-        LOGGER.info("[CustomAuthenticator] - User request dada info:");
-        LOGGER.info("USERNAME ---------------> {}", userName);
-        LOGGER.info("PASSWORD ---------------> {}", password);
-        LOGGER.info("CLIENT_MASTER_ID -------> {}", clientMasterId);
-        LOGGER.info("CLIENT_MASTER_ENABLE ---> {}", clientMasterEnable);
+        LOGGER.info("[CustomAuthenticator] - User request data info:");
+        LOGGER.info("[CustomAuthenticator] - USERNAME ---------------> {}", userName);
+        LOGGER.info("[CustomAuthenticator] - PASSWORD ---------------> {}", password);
+        LOGGER.info("[CustomAuthenticator] - CLIENT_MASTER_ID -------> {}", clientMasterId);
+        LOGGER.info("[CustomAuthenticator] - CLIENT_MASTER_ENABLE ---> {}", clientMasterEnable);
 
         if (userName.equals("admin") && password.equals("admin")) {
             LOGGER.info("[CustomAuthenticator] - User ADMIN authenticated with success");

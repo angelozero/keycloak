@@ -36,9 +36,9 @@ public class UserPostgresRepository {
                 var userPassword = resultSet.getString("password");
 
                 LOGGER.info("[UserPostgresRepository] - User found with success");
-                LOGGER.info("ID -------------- {}", id);
-                LOGGER.info("FIRST NAME ------ {}", firstName);
-                LOGGER.info("EMAIL ----------- {}", userEmail);
+                LOGGER.info("[UserPostgresRepository] - ID -------------- {}", id);
+                LOGGER.info("[UserPostgresRepository] - FIRST NAME ------ {}", firstName);
+                LOGGER.info("[UserPostgresRepository] - EMAIL ----------- {}", userEmail);
 
                 return new User(id, firstName, lastName, userEmail, userPassword);
             }
