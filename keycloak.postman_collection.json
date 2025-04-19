@@ -132,19 +132,21 @@
 					"name": "Hello Keycloak - Get Token",
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhbnA0cVFFd3NXWFpHakRndW5rblpMb080X2lndVJHUjBQZzFSVFowOVIwIn0.eyJleHAiOjE3NDM2OTk0ODgsImlhdCI6MTc0MzY5OTQyOCwianRpIjoiNzBmMTBiOTUtMGMxMy00OGE2LWI2ODAtMzRiNTdlYmYwMTFhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9tYXN0ZXIiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNzRhMzE1YjUtNTA5Yi00M2Q0LWJkYjktMjJjYzNkMjlmYTdlIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiemVybyIsInNpZCI6IjhjYWM2YTVkLWFmNmItNDMwYy1hYTZlLWIwOWNlMGIxZDU5NSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1tYXN0ZXIiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiemVybyI6eyJyb2xlcyI6WyJjbGllbnRfYWRtaW4iXX0sImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IkNhcmwgRnJpZWRyaWNoIEdhdXNzIEdhdXNzIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiZ2F1c3MiLCJnaXZlbl9uYW1lIjoiQ2FybCBGcmllZHJpY2ggR2F1c3MiLCJmYW1pbHlfbmFtZSI6IkdhdXNzIiwiZW1haWwiOiJnYXVzc0BsZGFwLmZvcnVtc3lzLmNvbSJ9.mVtcVWOOiNdlTUxjw0C75qLGerpdx5HKgb23LW_MVjz9PmS1QKaxnAGvusOrZfXWPNvsLubGhXOoY1ukp1GD-KCcsd85qkj0XSbc7e24pskeDMlcCGxvARlu3G-uoa-yqg5fRqhxmwY9VSHThiNKBjKNs1PRlDbP-HVkpj6VOZEmBuMB_1PKMrLRXsZ4PydhpqjVaIsNvqlyeSa7jS4H2MhBlhGc2urljaQg2cfJWjSES4_E2RBo332gymPofA0nZtqcljrK3MWUiLgoIh3kHA2Q4XNJedKZWJBZPHrJquAuphxu1a4Hb2-uXjd1hLV8I888HL3hcf-LghPXzrCoKw",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"gauss\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:9090/api/v1/keycloak/admin",
+							"raw": "http://localhost:9090/api/v1/keycloak/token",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -154,7 +156,7 @@
 								"api",
 								"v1",
 								"keycloak",
-								"admin"
+								"token"
 							]
 						}
 					},
@@ -168,7 +170,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhbnA0cVFFd3NXWFpHakRndW5rblpMb080X2lndVJHUjBQZzFSVFowOVIwIn0.eyJleHAiOjE3NDM2OTk0ODgsImlhdCI6MTc0MzY5OTQyOCwianRpIjoiNzBmMTBiOTUtMGMxMy00OGE2LWI2ODAtMzRiNTdlYmYwMTFhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9tYXN0ZXIiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNzRhMzE1YjUtNTA5Yi00M2Q0LWJkYjktMjJjYzNkMjlmYTdlIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiemVybyIsInNpZCI6IjhjYWM2YTVkLWFmNmItNDMwYy1hYTZlLWIwOWNlMGIxZDU5NSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1tYXN0ZXIiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiemVybyI6eyJyb2xlcyI6WyJjbGllbnRfYWRtaW4iXX0sImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IkNhcmwgRnJpZWRyaWNoIEdhdXNzIEdhdXNzIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiZ2F1c3MiLCJnaXZlbl9uYW1lIjoiQ2FybCBGcmllZHJpY2ggR2F1c3MiLCJmYW1pbHlfbmFtZSI6IkdhdXNzIiwiZW1haWwiOiJnYXVzc0BsZGFwLmZvcnVtc3lzLmNvbSJ9.mVtcVWOOiNdlTUxjw0C75qLGerpdx5HKgb23LW_MVjz9PmS1QKaxnAGvusOrZfXWPNvsLubGhXOoY1ukp1GD-KCcsd85qkj0XSbc7e24pskeDMlcCGxvARlu3G-uoa-yqg5fRqhxmwY9VSHThiNKBjKNs1PRlDbP-HVkpj6VOZEmBuMB_1PKMrLRXsZ4PydhpqjVaIsNvqlyeSa7jS4H2MhBlhGc2urljaQg2cfJWjSES4_E2RBo332gymPofA0nZtqcljrK3MWUiLgoIh3kHA2Q4XNJedKZWJBZPHrJquAuphxu1a4Hb2-uXjd1hLV8I888HL3hcf-LghPXzrCoKw",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhbnA0cVFFd3NXWFpHakRndW5rblpMb080X2lndVJHUjBQZzFSVFowOVIwIn0.eyJleHAiOjE3NDM3MjcyMzYsImlhdCI6MTc0MzcyNzE3NiwianRpIjoiYWRkYWVlNDMtY2Q4Ny00ZGY1LTk0NzYtMzQ1NjAxNTBlYWM3IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9tYXN0ZXIiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNDA5ZTU0NWYtYTZkOS00NTNmLWI3MDQtNWQyY2FhNDY5Zjg3IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiemVybyIsInNpZCI6ImQ0NzY4NmYxLTM3MDQtNDkxZi05NmU5LWU3Y2ZiZGViYWU3ZSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1tYXN0ZXIiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiemVybyI6eyJyb2xlcyI6WyJjbGllbnRfdXNlciJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiTGVvbmhhcmQgRXVsZXIgRXVsZXIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJldWxlciIsImdpdmVuX25hbWUiOiJMZW9uaGFyZCBFdWxlciIsImZhbWlseV9uYW1lIjoiRXVsZXIiLCJlbWFpbCI6ImV1bGVyQGxkYXAuZm9ydW1zeXMuY29tIn0.Jjifsb8xdrJtqi4E8mJf4RA0ga2JGhf4kpcDsgeMRsXBLq8MQUpHgO8gI8Ubne9Yjbm6KU694YlahhkpHDfpXkWKDxH4XsXRNK_EnMBpXXnZittmD0Fn7pwFUDeYTw8CN3Knphlin3VT1chSVlMP0gQRss_urFuvTTEIWfJswRc8ir1yfLvg8jtJEDvsWgfTXGELRTIvLE9RK3P9FNrcxGcAjJiC8PdRhHMBduELcXnmpyjVlig5LwWILNnLUqNcrq6v7VZF9dq-D5U2p5YY3aCcFHhjdti909g04rHsZAOm6ppE8hRLhRvpjaWbuN1c-fSesWvmKSX2AwGZIlIzWg",
 									"type": "string"
 								}
 							]
