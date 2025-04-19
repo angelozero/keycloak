@@ -6,7 +6,10 @@ import com.angelozero.keycloak.custom.spi.authenticator.service.PasswordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserPostgresRepository {
 
@@ -16,56 +19,42 @@ public class UserPostgresRepository {
     private static final String POSTGRESQL_USER = "admin";
     private static final String POSTGRESQL_PASSWORD = "admin";
 
-    public User findByEmailAndPassword(String email, String password) {
+    public static UserPostgresRepository getInstance() {
+        return new UserPostgresRepository();
+    }
 
-        try {
-            LOGGER.info("Connecting to the Postgres database - find by email and password method");
-            var connection = DriverManager.getConnection(JDBC_POSTGRESQL_URL, POSTGRESQL_USER, POSTGRESQL_PASSWORD);
+    public User findByEmail(String email) {
+        LOGGER.info("[UserPostgresRepository] - Find user by email: {}", email);
 
-            var statement = connection.prepareStatement("SELECT * FROM public.\"USER\" WHERE email = ?");
-            statement.setString(1, email);
+        try (var resultSet = findBy(email)) {
 
-            var resultSet = statement.executeQuery();
-
-            LOGGER.info("Postgres database query executed with success");
             if (resultSet.next()) {
-
                 var id = resultSet.getInt("id");
                 var firstName = resultSet.getString("first_name");
                 var lastName = resultSet.getString("last_name");
                 var userEmail = resultSet.getString("email");
                 var userPassword = resultSet.getString("password");
 
-                var hashPassword = PasswordService.generateHash(password);
-
-                if (!userPassword.equals(hashPassword)) {
-                    throw new UserRepositoryException("The provided password does not match the stored password.");
-                }
-
-                LOGGER.info("User found with success");
+                LOGGER.info("[UserPostgresRepository] - User found with success");
                 LOGGER.info("ID -------------- {}", id);
                 LOGGER.info("FIRST NAME ------ {}", firstName);
-                LOGGER.info("LAST NAME ------- {}", lastName);
                 LOGGER.info("EMAIL ----------- {}", userEmail);
-                LOGGER.info("PASSWORD -------- {}", password);
-                LOGGER.info("HASH PASSWORD --- {}", hashPassword);
 
                 return new User(id, firstName, lastName, userEmail, userPassword);
             }
 
-            LOGGER.info("User in Postgres DataBase was not found");
+            LOGGER.info("[UserPostgresRepository] - No User was found with email {}", email);
             return null;
 
-        } catch (Exception ex) {
-            LOGGER.error("Failed to find User into the Postgres database - Error: {}", ex.getMessage());
-            throw new RuntimeException("Failed to connect to the Postgres database - Error: " + ex.getMessage());
+        } catch (SQLException ex) {
+            LOGGER.error("[UserPostgresRepository] - Failed to find User - Error: {}", ex.getMessage());
+            throw new UserRepositoryException("[UserPostgresRepository] - Failed to find User - Error: " + ex.getMessage());
         }
     }
 
     public void save(User user) {
         try {
-            LOGGER.info("Connecting to the Postgres database - save user method");
-            var connection = DriverManager.getConnection(JDBC_POSTGRESQL_URL, POSTGRESQL_USER, POSTGRESQL_PASSWORD);
+            var connection = getConnection();
 
             var statement = connection.prepareStatement("INSERT INTO public.\"USER\" " +
                     "(id, first_name, last_name, email, \"password\") " +
@@ -80,17 +69,39 @@ public class UserPostgresRepository {
             int rowsInserted = statement.executeUpdate();
 
             if (rowsInserted > 0) {
-                LOGGER.info("User saved with success");
+                LOGGER.info("[UserPostgresRepository] - User saved with success");
             }
 
         } catch (Exception ex) {
-            LOGGER.error("Failed to connect to the Postgres database - Error: {}", ex.getMessage());
-            throw new RuntimeException("Failed to connect to the Postgres database - Error: " + ex.getMessage());
+            LOGGER.error("[UserPostgresRepository] - Failed to save user - Error: {}", ex.getMessage());
+            throw new RuntimeException("[UserPostgresRepository] - Failed to save user - Error: " + ex.getMessage());
         }
     }
 
-    public static UserPostgresRepository getInstance() {
-        return new UserPostgresRepository();
+    private ResultSet findBy(String email) {
+        var connection = getConnection();
+
+        try {
+            var statement = connection.prepareStatement("SELECT * FROM public.\"USER\" WHERE email = ?");
+            statement.setString(1, email);
+
+            return statement.executeQuery();
+
+        } catch (Exception ex) {
+            LOGGER.error("[UserPostgresRepository] - Failed to execute select query to find user by email {} - Error: {}", email, ex.getMessage());
+            throw new UserRepositoryException("[UserPostgresRepository] - " +
+                    "Failed to execute select query to find user by email" + email + " - Error: " + ex.getMessage());
+        }
     }
 
+    private Connection getConnection() {
+        try {
+            LOGGER.info("[UserPostgresRepository] - Getting connection into PostgresSQl database");
+            return DriverManager.getConnection(JDBC_POSTGRESQL_URL, POSTGRESQL_USER, POSTGRESQL_PASSWORD);
+
+        } catch (Exception ex) {
+            LOGGER.error("[[UserPostgresRepository] - Failed to connect into the database - Error: {}", ex.getMessage());
+            throw new UserRepositoryException("[UserPostgresRepository] - Failed to connect into the database - Error: " + ex.getMessage());
+        }
+    }
 }

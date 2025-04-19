@@ -13,9 +13,6 @@ import java.util.List;
 
 public class CustomAuthenticationFactory implements AuthenticatorFactory {
 
-    public static final String CLIENT_MASTER_ID = "CLIENT_MASTER_ID";
-    public static final String CLIENT_MASTER_ENABLE = "CLIENT_MASTER_ENABLE";
-
     private static final CustomAuthenticator CUSTOM_AUTHENTICATOR_INSTANCE = new CustomAuthenticator();
 
     @Override
@@ -67,7 +64,6 @@ public class CustomAuthenticationFactory implements AuthenticatorFactory {
         clientMasterConfig.setHelpText("This is an information of the client master id");
 
         ProviderConfigProperty clientMasterEnableConfig = new ProviderConfigProperty();
-        clientMasterEnableConfig = new ProviderConfigProperty();
         clientMasterEnableConfig.setName("CLIENT_MASTER_ENABLE");
         clientMasterEnableConfig.setLabel("Client Master enable ?");
         clientMasterEnableConfig.setType(ProviderConfigProperty.BOOLEAN_TYPE);
@@ -97,6 +93,6 @@ public class CustomAuthenticationFactory implements AuthenticatorFactory {
 
     @Override
     public String getId() {
-        return CustomAuthenticator.PROVIDER_ID;
+        return CustomAuthenticator.CUSTOM_AUTHENTICATOR_PROVIDER_ID;
     }
 }
