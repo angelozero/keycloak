@@ -227,6 +227,64 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "angelo-zero-custom-spi",
+			"item": [
+				{
+					"name": "Keycloak - Get Authorization Token with SPI",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/realms/angelo-zero-realm/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8080/realms/angelo-zero-realm/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "xvUhQmfyDb9lGcYC9MnEQpHUCv3V98QT",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "angelo-zero",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "body",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "authorization_code",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
