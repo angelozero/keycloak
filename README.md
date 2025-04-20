@@ -100,15 +100,15 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
     - A função setClaim é onde o mapeamento real acontece, permitindo que atributos adicionais sejam incluídos no token.
 
 ---
-### A pasta *META-INF* e o arquivo *org.keycloak.authentication.AuthenticatorFactory*
+### A pasta *META-INF* e seus arquivos
 - Para registro do autenticador personalizado no Keycloak, é necessário criar:
     - 1. **`META-INF`**: 
         - Essa pasta é necessária para armazenar os metadados do seu módulo. 
         - É uma convenção em aplicações Java que permite que o Keycloak reconheça e configure seu autenticador personalizado.
 
-    - 2. **`org.keycloak.authentication.AuthenticatorFactory`**: 
-        - Esse arquivo é crucial, pois ele informa ao Keycloak sobre a interface que está sendo implementanda.
-        - Nele, você define a classe que implementa a lógica do seu autenticador.
+    - 2. **`*.AuthenticatorFactory` e `*.ProtocolMapper`**: 
+        - Esses arquivos são cruciais, pois eles informam ao Keycloak sobre as interfaces que estão sendo implementandas.
+        - Neles, você define as classes que implementam a lógica do seu autenticador e mapeador.
 
 - **Exemplo de Estrutura de Arquivo**
   ```plaintext
@@ -119,21 +119,103 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   │       └── org.keycloak.authentication.AuthenticatorFactory
   │       └── org.keycloak.protocol.ProtocolMapper
   │
-  └── MyCustomAuthenticatorFactory.java
+  └── CustomAccessTokenMapper.java
+  └── CustomAuthenticationFactory.java
+  └── CustomAuthenticator.java
   ```
 
 
 ---
+## Publicando uma SPI via Docker
+  - Execute o comando `mvn clean install` ou `mvn clean package`
+  - Acesse a pasta `target` para copiar e colar o .jar para a pasta `providers` do keycloak através do seguinte comando:
+  - *( necessário ter o [Docker](https://docs.docker.com/engine/install/) instalado )*
+    ```shell
+    docker cp keycloak-custom-spi.jar  keycloak_container:/opt/keycloak/providers
+    ```
+  - Via terminal build o `.jar` com o seguinte comando:
+    ```shell
+    docker exec -it keycloak_container /opt/keycloak/bin/kc.sh build
+    ```
+  - Após o build realizado com suceeso reinicie seu container do Keycloack
 
+---  
+## Configurando o Keycloack
+### Keycloack Docker Container
+  ```yml
+  version: '3.8'
 
+  services:
+    postgres:
+      image: postgres
+      container_name: postgres_container
+      networks:
+        - keycloak-network
+      environment:
+        POSTGRES_USER: admin
+        POSTGRES_PASSWORD: admin
+        POSTGRES_DB: postgres
+      ports:
+        - "5432:5432"
+      platform: linux/amd64
 
+    keycloak:
+      image: keycloak/keycloak:25.0.0
+      container_name: keycloak_container
+      networks:
+        - keycloak-network
+      environment:
+        DB_VENDOR: postgres
+        DB_ADDR: postgres
+        DB_PORT: 5432
+        DB_DATABASE: postgres
+        DB_USER: admin
+        DB_PASSWORD: admin
+        KEYCLOAK_ADMIN: admin
+        KEYCLOAK_ADMIN_PASSWORD: admin
+  #      use these parameters if your keycloak version is 26.x.x
+  #      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+  #      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
 
+      ports:
+        - "8080:8080"
+      platform: linux/amd64
+      command: start-dev
 
+  networks:
+    keycloak-network:
+      driver: bridge
+  ```
 
-
-
-
-
+---
+### Configurando o Keycloak
+- Acesse o Keycloak via [localhost](http://localhost:8080/)
+- Crie seu usuário com senha para acesso de administrador
+- Logue com o usuário cadastrado
+  ![01](./images/01.png)
+- Criando um **Realm**
+  ![02](./images/02.png)
+    - Criando um **Client**
+    ![03](images/03.png)
+    ![04](images/04.png)
+    ![05](images/05.png)
+    ![06](images/06.png)
+- Configurando e adicionando nossa SPI CustomAuthenticator e CustomAccessTokenMapper
+  - CustomAuthenticator
+    ![07](images/07.png)
+    ![08](images/08.png) 
+    ![09](images/09.png)
+    ![10](images/10.png)
+    ![11](images/11.png)
+  - CustomAccessTokenMapper
+    ![12](images/12.png)
+    ![13](images/13.png)
+    ![14](images/14.png)
+    ![15](images/15.png)
+    ***Retorne as infos de Client***
+    ![16](images/16.png)
+    ![17](images/17.png)
+    ![18](images/18.png)
 
 
 
