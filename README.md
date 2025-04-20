@@ -231,8 +231,9 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   - LDAP searching and updating
     - **Edit mode:** READ_ONLY
     - **Users DN:** dc=example,dc=com
-      ![19](images/19.png)
-      ![20](images/20.png)
+    
+  ![19](images/19.png)
+  ![20](images/20.png)
 
 ---
 ## Verificando os usuários importados
