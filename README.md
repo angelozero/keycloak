@@ -140,7 +140,7 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   - Após o build realizado com suceeso reinicie seu container do Keycloack
 
 ---  
-## Configurando o Keycloack
+## Executando o Keycloack
 ### Keycloack Docker Container
   ```yml
   version: '3.8'
@@ -188,7 +188,8 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   ```
 
 ---
-### Configurando o Keycloak
+## Configurando o Keycloak
+### Executando o Keycloak
 - Acesse o Keycloak via [localhost](http://localhost:8080/)
 - Crie seu usuário com senha para acesso de administrador
 - Logue com o usuário cadastrado
@@ -200,25 +201,106 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
     ![04](images/04.png)
     ![05](images/05.png)
     ![06](images/06.png)
-- Configurando e adicionando nossa SPI CustomAuthenticator e CustomAccessTokenMapper
-  - CustomAuthenticator
-    ![07](images/07.png)
-    ![08](images/08.png) 
-    ![09](images/09.png)
-    ![10](images/10.png)
-    ![11](images/11.png)
-  - CustomAccessTokenMapper
-    ![12](images/12.png)
-    ![13](images/13.png)
-    ![14](images/14.png)
-    ![15](images/15.png)
-    ***Retorne as infos de Client***
-    ![16](images/16.png)
-    ![17](images/17.png)
-    ![18](images/18.png)
+### Configurando e adicionando a SPI 
+- **CustomAuthenticator**
+  ![07](images/07.png)
+  ![08](images/08.png) 
+  ![09](images/09.png)
+  ![10](images/10.png)
+  ![11](images/11.png)
+- **CustomAccessTokenMapper**
+  ![12](images/12.png)
+  ![13](images/13.png)
+  ![14](images/14.png)
+  ![15](images/15.png)
+  ![16](images/16.png)
+  ![17](images/17.png)
+  ![18](images/18.png)
+
+---
+## Conectando com uma base [LDAP](https://www.forumsys.com/2022/05/10/online-ldap-test-server/)
+- User federation > Add LDAP provider
+  - General options
+    **Vendor:** Other
+  
+  - Connection and authentication settings
+    **Connection URL:** ldap://ldap.forumsys.com:389
+    **Bind DN:** cn=read-only-admin,dc=example,dc=com
+    **Bind credentials:** password
+
+  - LDAP searching and updating
+    **Edit mode:** READ_ONLY
+    **Users DN:** dc=example,dc=com
+    ![19](images/19.png)
+    ![20](images/20.png)
+
+---
+## Verificando os usuários importados
+- Em Users busque pelo usuário "*guass*"
+  ![21](images/21.png)
+  ![22](images/22.png)
+
+---
+## Buscando as informações de autenticação em Realm
+- Realm settings clique no menu [OpenID Endpoint Configuration](http://localhost:8080/realms/angelo-zero-realm/.well-known/openid-configuration)
+- Ele irá abrir a seguinte informação
+  ```json
+  {
+      "issuer": "http://localhost:8080/realms/angelo-zero-realm",
+      // Auth URL
+      "authorization_endpoint": "http://localhost:8080/realms/angelo-zero-realm/protocol/openid-connect/auth",
+      // Access Token URL
+      "token_endpoint": "http://localhost:8080/realms/angelo-zero-realm/protocol/openid-connect/token",
+      "introspection_endpoint": "http://localhost:8080/realms/angelo-zero-realm/protocol/openid-connect/token/introspect",
+      "userinfo_endpoint": "http://localhost:8080/realms/angelo-zero-realm/protocol/openid-connect/userinfo",
+      // some information here...
+  }
+  ```
+- Via postman crie uma nova autenticação 
+  ![23](images/23.png)
+  - Recupere os valores de Client ID e Client Secret
+  ![24](images/24.png)
+  ![25](images/25.png)
+  - Get New Access Token
+  ![26](images/26.png)
+  ![27](images/27.png)
+
+---
+## Validando as SPI
+- Através dos log's via container keycloak
+  ```shell
+  [CustomAuthenticator] - Custom Authenticator SPI
+  [CustomAuthenticator] - User request data info:
+  [CustomAuthenticator] - USERNAME ---------------> gauss
+  [CustomAuthenticator] - PASSWORD ---------------> password
+  [CustomAuthenticator] - CLIENT_MASTER_ID -------> 0
+  [CustomAuthenticator] - CLIENT_MASTER_ENABLE ---> true
+  [UserPostgresRepository] - Find user by email: gauss@ldap.forumsys.com
+  [UserPostgresRepository] - Getting connection into PostgresSQl database
+  [UserPostgresRepository] - No User was found with email gauss@ldap.forumsys.com
+  [UserPostgresRepository] - Getting connection into PostgresSQl database
+  [UserPostgresRepository] - User saved with success
+  [CustomAuthenticator] - User "gauss" authenticated with success
+  [CustomAccessTokenMapper] - Custom Access Token Mapper SPI
+  [UserPostgresRepository] - Find user by email: gauss@ldap.forumsys.com
+  [UserPostgresRepository] - Getting connection into PostgresSQl database
+  [UserPostgresRepository] - User found with success
+  [UserPostgresRepository] - ID -------------- 9
+  [UserPostgresRepository] - FIRST NAME ------ Carl Friedrich Gauss
+  [UserPostgresRepository] - EMAIL ----------- gauss@ldap.forumsys.com
+  [CustomAccessTokenMapper] - Token updated with success with "PostgresSQL User ID": "9"
+  ```
+
+- E o seguinte token gerado
+  ```shell
+  eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJuT0JxeVpPbkowNGtWb1hhbEVjZ3BxRUJiV25EakQ4Q0ljb2cyenQ1elQ0In0.eyJleHAiOjE3NDUxODMzMzAsImlhdCI6MTc0NTE4MzAzMCwiYXV0aF90aW1lIjoxNzQ1MTgzMDI5LCJqdGkiOiI5MGVjOGNjNS1iOGM3LTRmZTUtYjQ0NS0yMWM1YzZiOTAxZGIiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvcmVhbG1zL2FuZ2Vsby16ZXJvLXJlYWxtIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjIxMTcwZjBmLTU4ZTktNDFlMC1iYWYyLWU0YzRlN2IxNGI2NyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFuZ2Vsby16ZXJvIiwic2lkIjoiN2MwMWE3YmYtNDdjNy00NmZhLWFkYjgtZTgyYzhmNmI3NGQ2IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWFuZ2Vsby16ZXJvLXJlYWxtIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicG9zdGdyZXNfc3FsX3VzZXJfaWQiOjksIm5hbWUiOiJDYXJsIEZyaWVkcmljaCBHYXVzcyBHYXVzcyIsInByZWZlcnJlZF91c2VybmFtZSI6ImdhdXNzIiwiZ2l2ZW5fbmFtZSI6IkNhcmwgRnJpZWRyaWNoIEdhdXNzIiwiZmFtaWx5X25hbWUiOiJHYXVzcyIsImVtYWlsIjoiZ2F1c3NAbGRhcC5mb3J1bXN5cy5jb20ifQ.fWHN7-KXDTo3GAvv7v3XY-673WgZj4ZKLOIx31pAxwPcuOaX-XVHmQyRyz-41l-wv8Lm0qQYGq6zOcqj_z1vzYzDfGSznGByB91MR18XvQ3mvlmwro2Iz1f3bH-oJ4xxUk3Q49RKm66rUi31jUo4fBHoG-hFhJG1JMz9yaj3GqKd3XZ07CVN_XKQn26dsh-ZBzZH-i0wh-oqHGTeAMfXxEUfaIETFb5fBSwu2Q5CSNl06hMRNs1X12t68Rfb-PDX2NYWbOCBggpaFR72Bu_oO3UqTRxT42W2l_A1LnC7OthVJd0mVVFPXlrDm4U8Go_n2880CNht8VHAoJM9FfIvcw
+  ```
+
+- Ao decodificar o token recebemos a seguinte informação do id do usuário registro na base PostgresSQL
+  ![28](images/28.png)
 
 
-
+xxxxxxxxx
 
 .
 ---
@@ -266,12 +348,7 @@ Site
     );
   - 
 
-- LDAP
-- https://www.forumsys.com/2022/05/10/online-ldap-test-server/
-- ldap://ldap.forumsys.com:389
-- cn=read-only-admin,dc=example,dc=com
-- password
-- dc=example,dc=com
+
 ---
 - [Keycloak UserFederation e Mappers - by Marco Seabra](https://www.youtube.com/watch?v=PHbxodkWlxg)
 - [How to create a Keycloak client with an audience mapper - by Alex Ellis](https://www.youtube.com/watch?v=G2QVhUAEylc)
