@@ -231,7 +231,7 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   - LDAP searching and updating
     - **Edit mode:** READ_ONLY
     - **Users DN:** dc=example,dc=com
-    
+
   ![19](images/19.png)
   ![20](images/20.png)
 
@@ -259,10 +259,12 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   ```
 - Via postman crie uma nova autenticação 
   ![23](images/23.png)
-  - Recupere os valores de Client ID e Client Secret
+
+- Recupere os valores de Client ID e Client Secret
   ![24](images/24.png)
   ![25](images/25.png)
-  - Get New Access Token
+
+- Get New Access Token
   ![26](images/26.png)
   ![27](images/27.png)
 
