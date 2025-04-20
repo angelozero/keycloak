@@ -15,8 +15,8 @@ public class CustomAuthenticator implements Authenticator {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticator.class);
 
     public static final String CUSTOM_AUTHENTICATOR_PROVIDER_ID = "angelo-zero-custom-authenticator-id";
-    public static final String CUSTOM_CLIENT_MASTER_ID = "CUSTOM_CLIENT_MASTER_ID";
-    public static final String CUSTOM_CLIENT_MASTER_ENABLE = "CUSTOM_CLIENT_MASTER_ENABLE";
+    private static final String CUSTOM_CLIENT_MASTER_ID = "CUSTOM_CLIENT_MASTER_ID";
+    private static final String CUSTOM_CLIENT_MASTER_ENABLE = "CUSTOM_CLIENT_MASTER_ENABLE";
 
     @Override
     public void authenticate(AuthenticationFlowContext context) {

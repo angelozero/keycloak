@@ -1,52 +1,147 @@
-# SPI Customizada para autenticação com SpringBoot, Keycloak, Docker e PostgreSQL
+# Keycloack SPI
+
+### Autenticação usando Keycloack, Springboot com JWT, PostgresSQL e Docker
 
 ![logo](./images/logo-keycloak-spi.jpeg)
 
+- Neste artigo irei demonstrar como criar uma simples SPI customizada para interceptar uma autenticação. Ao interceptar esta autenticação nós vamos salvar o registro do usuário interceptado em uma base postgres SQL e devolver seu id nos dados do token autenticado. Logo após iremos chamar uma api REST e recuperar este id via token. A idéia é exclusivamente para estudo e não uma solução para um "problema real".
+
+---
+## SPI
 - O que é um SPI (Service Provider Interface) ? 
-  - Uma SPI é um mecanismo que permite a extensão e personalização do comportamento do Keycloak. As SPIs fornecem um conjunto de interfaces que os desenvolvedores podem implementar para adicionar novas funcionalidades ou modificar as existentes.
+  - Uma SPI é um mecanismo que permite a extensão e personalização do comportamento do Keycloak
+  - As SPIs fornecem um conjunto de interfaces que os desenvolvedores podem implementar para adicionar novas funcionalidades ou modificar as existentes.
 
-- Neste artigo irei demonstrar como criar uma simples SPI customizada para interceptar uma autenticação. A idéia é exclusivamente para estudo e não uma solução para um "problema real".
-- O que vamos fazer no keycloack ?
-    - Criar um realm
-    - Criar um client
-    - Criar roles 
-    - Se conectar em uma base Ldap
-    - Associar os usuário da base Ldap a nossas roles
-    - Interceptar sua autenticação para registrar seus dados em uma base de dados postgres
-    - Invocar uma api rest e atraves do token gerado pelo keycloak liberar o acesso respectivo a esse usuário de acordo com seu papel (role)
+---
+### A interface AuthenticatorFactory
+- A interface `AuthenticatorFactory` é fundamental para a personalização e extensão dos mecanismos de autenticação no Keycloak, permitindo que desenvolvedores integrem novos métodos de autenticação de forma flexível e configurável.
+  - **Criação de Autenticadores**: Permite a criação de instâncias de autenticação que podem ser utilizadas durante o processo de login.
+  - **Configuração**: Fornece métodos para definir propriedades e configurações do autenticador.
+  ```java
+  import org.keycloak.authentication.AuthenticationFlowContext;
+  import org.keycloak.authentication.Authenticator;
+  import org.keycloak.models.KeycloakSession;
+  import org.keycloak.models.RealmModel;
+  import org.keycloak.models.UserModel;
+  import org.slf4j.Logger;
+  import org.slf4j.LoggerFactory;
 
-- Vamos interceptar uma autenticação, recuperar os dados deste usuário e tentar encontra-lo em uma base de dados postgres. Se ele existir apenas seguir com a autenticação caso contrário vamos registrar ele na nossa base de dados e assim liberar sua autenticação.
-- Após a geração do token, vamos utiliza-lo para chamar um serviço rest e tentar acessar alguns serviços sendo validados pelas roles associdadas a este usuário do LDAP.
+  public class CustomAuthenticationFactory implements AuthenticatorFactory {
+    // some implemented methods here...
+  }
+  ```
 
+### Sobre os Métodos
+- **create(KeycloakSession keycloakSession)**: 
+  - Cria e retorna uma instância do `CustomAuthenticator`.
 
+- **getRequirementChoices()**: 
+  - Requisitos que define se a autenticação é obrigatória ou desativada.
 
+- **getDisplayType()**: 
+  - Nome a ser exibido da autenticação criada.
+
+- **getConfigProperties()**: 
+  - Lista de propriedades de configuração para o autenticador.
+
+- **getId()**: 
+  - Retorna o identificador do provedor do autenticador personalizado, que é uma constante definida na classe `CustomAuthenticator`.
+
+---
+### A interface Authenticator
+- A interface `Authenticator` é responsável por gerenciar o processo de autenticação de usuários.
+- **Implementação:** Geralmente, a classe Authenticate implementa a interface Authenticator, que define os métodos necessários para o processo de autenticação.
+- **Configuração:** A classe deve ser configurada no Keycloak através do console de administração, onde você pode associar a SPI a um fluxo de autenticação específico.
+```java
+import org.keycloak.authentication.AuthenticationFlowContext;
+import org.keycloak.authentication.Authenticator;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class CustomAuthenticator implements Authenticator {
+    // some implemented methods here...
+}
+```
+
+### Sobre os Métodos
+- **authenticate(AuthenticationFlowContext context):** 
+  - Este método é chamado para iniciar o processo de autenticação. Aqui, você pode implementar a lógica para verificar as credenciais do usuário.
+
+- **action(AuthenticationFlowContext context):** 
+  - Este método é usado para lidar com ações adicionais durante a autenticação, como a confirmação de uma senha ou a verificação de um código enviado por SMS.
+
+- **setRequiredActions(KeycloakSession keycloakSession, RealmModel realmModel, UserModel userModel):** 
+  - Permite definir ações que o usuário deve realizar após a autenticação inicial, como a atualização de senha ou a configuração de autenticação de dois fatores
 
 
 ---
-Keycloak Features
-- Single Sign-On (SSO) and Single Logout
-- Identity Brokering and Social Login
-- User Federation ( LDAP / Active Directory )
-- Fine-Grained Authorization Services 
-- Centralized Management and Admin Console
-- Client Adapters ( Java / Javascript / Node JS )
+### As interfaces OIDCAccessTokenMapper, OIDCIDTokenMapper e UserInfoTokenMapper 
+- A classe estende `AbstractOIDCProtocolMapper` e implementa várias interfaces, incluindo `OIDCAccessTokenMapper`, o que permite mapear atributos personalizados para o token de acesso.
+```java
+import org.keycloak.models.ClientSessionContext;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.ProtocolMapperModel;
+import org.keycloak.models.UserSessionModel;
+import org.keycloak.protocol.oidc.mappers.*;
+import org.keycloak.provider.ProviderConfigProperty;
+import org.keycloak.representations.IDToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-Keycloak Advantages
-- Open Source
-- Versatility
-- Scalability
-- Security
-- Customizability
-- Ease of Use ( designed to be ease to use)
+public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implements OIDCAccessTokenMapper, OIDCIDTokenMapper, UserInfoTokenMapper {
+    //some methdos here...
+}
+```
+### Sobre os Métodoa
+  - **setClaim(IDToken token, ProtocolMapperModel mappingModel, UserSessionModel userSession, KeycloakSession keycloakSession, ClientSessionContext clientSessionCtx)**
+    - A função setClaim é onde o mapeamento real acontece, permitindo que atributos adicionais sejam incluídos no token.
 
-Keycloak Terms
-- Realm
-- Clients
-- Client Scopes
-- Users
--  Groups
+---
+### A pasta *META-INF* e o arquivo *org.keycloak.authentication.AuthenticatorFactory*
+- Para registro do autenticador personalizado no Keycloak, é necessário criar:
+    - 1. **`META-INF`**: 
+        - Essa pasta é necessária para armazenar os metadados do seu módulo. 
+        - É uma convenção em aplicações Java que permite que o Keycloak reconheça e configure seu autenticador personalizado.
+
+    - 2. **`org.keycloak.authentication.AuthenticatorFactory`**: 
+        - Esse arquivo é crucial, pois ele informa ao Keycloak sobre a interface que está sendo implementanda.
+        - Nele, você define a classe que implementa a lógica do seu autenticador.
+
+- **Exemplo de Estrutura de Arquivo**
+  ```plaintext
+  my-custom-authenticator-project/
+  │
+  ├── META-INF/
+  │   └── services/
+  │       └── org.keycloak.authentication.AuthenticatorFactory
+  │       └── org.keycloak.protocol.ProtocolMapper
+  │
+  └── MyCustomAuthenticatorFactory.java
+  ```
 
 
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.
+---
+---
+---
 - Subir postgresql via docker
   - docker pull postgres --platform=linux/amd64 
   - docker run --platform=linux/amd64 -p 5432:5432 -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin postgres
