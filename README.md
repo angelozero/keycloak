@@ -196,11 +196,11 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   ![01](./images/01.png)
 - Criando um **Realm**
   ![02](./images/02.png)
-    - Criando um **Client**
-    ![03](images/03.png)
-    ![04](images/04.png)
-    ![05](images/05.png)
-    ![06](images/06.png)
+- Criando um **Client**
+  ![03](images/03.png)
+  ![04](images/04.png)
+  ![05](images/05.png)
+  ![06](images/06.png)
 ### Configurando e adicionando a SPI 
 - **CustomAuthenticator**
   ![07](images/07.png)
