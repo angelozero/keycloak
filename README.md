@@ -245,7 +245,7 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
 ## Buscando as informações de autenticação em Realm
 - Realm settings clique no menu [OpenID Endpoint Configuration](http://localhost:8080/realms/angelo-zero-realm/.well-known/openid-configuration)
 - Ele irá abrir a seguinte informação
-  ```yaml
+  ```javascript
   {
       "issuer": "http://localhost:8080/realms/angelo-zero-realm",
       // Auth URL
