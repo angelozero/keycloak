@@ -58,13 +58,13 @@ public class CustomAuthenticationFactory implements AuthenticatorFactory {
         final List<ProviderConfigProperty> configProperties = new ArrayList<>();
 
         ProviderConfigProperty clientMasterConfig = new ProviderConfigProperty();
-        clientMasterConfig.setName("CLIENT_MASTER_ID");
+        clientMasterConfig.setName(CustomAuthenticator.CUSTOM_CLIENT_MASTER_ID);
         clientMasterConfig.setLabel("Client Master ID");
         clientMasterConfig.setType(ProviderConfigProperty.STRING_TYPE);
         clientMasterConfig.setHelpText("This is an information of the client master id");
 
         ProviderConfigProperty clientMasterEnableConfig = new ProviderConfigProperty();
-        clientMasterEnableConfig.setName("CLIENT_MASTER_ENABLE");
+        clientMasterEnableConfig.setName(CustomAuthenticator.CUSTOM_CLIENT_MASTER_ENABLE);
         clientMasterEnableConfig.setLabel("Client Master enable ?");
         clientMasterEnableConfig.setType(ProviderConfigProperty.BOOLEAN_TYPE);
         clientMasterEnableConfig.setHelpText("his is an information of the client master enable");
