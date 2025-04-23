@@ -301,7 +301,6 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
 - Ao decodificar o token recebemos a seguinte informação do id do usuário registro na base PostgresSQL
   ![28](images/28.png)
 
-
 ---
 ## Base de dados PostgresSQL
 - Cria a tabela `USER`
