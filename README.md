@@ -208,6 +208,7 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   ![09](images/09.png)
   ![10](images/10.png)
   ![11](images/11.png)
+- ![11-5](images/11-5.png)
 - **CustomAccessTokenMapper**
   ![12](images/12.png)
   ![13](images/13.png)
@@ -276,22 +277,20 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   [CustomAuthenticator] - User request data info:
   [CustomAuthenticator] - USERNAME ---------------> gauss
   [CustomAuthenticator] - PASSWORD ---------------> password
-  [CustomAuthenticator] - CLIENT_MASTER_ID -------> 0
-  [CustomAuthenticator] - CLIENT_MASTER_ENABLE ---> true
-  [UserPostgresRepository] - Find user by email: gauss@ldap.forumsys.com
-  [UserPostgresRepository] - Getting connection into PostgresSQl database
-  [UserPostgresRepository] - No User was found with email gauss@ldap.forumsys.com
-  [UserPostgresRepository] - Getting connection into PostgresSQl database
-  [UserPostgresRepository] - User saved with success
-  [CustomAuthenticator] - User "gauss" authenticated with success
-  [CustomAccessTokenMapper] - Custom Access Token Mapper SPI
+  [CustomAuthenticator] - CONFIG VALUE -----------> active
+  [CustomAuthenticator] - CONFIG ENABLE ----------> true
   [UserPostgresRepository] - Find user by email: gauss@ldap.forumsys.com
   [UserPostgresRepository] - Getting connection into PostgresSQl database
   [UserPostgresRepository] - User found with success
-  [UserPostgresRepository] - ID -------------- 9
+  [UserPostgresRepository] - ID -------------- 10
   [UserPostgresRepository] - FIRST NAME ------ Carl Friedrich Gauss
   [UserPostgresRepository] - EMAIL ----------- gauss@ldap.forumsys.com
-  [CustomAccessTokenMapper] - Token updated with success with "PostgresSQL User ID": "9"
+  [CustomAuthenticator] - User "gauss" authenticated with success
+  [CustomAccessTokenMapper] - Custom Access Token Mapper SPI
+  [CustomAccessTokenMapper] - Config value -------> {update.profile.on.first.login=missing}
+  [CustomAccessTokenMapper] - Config value -------> {require.password.update.after.registration=false}
+  [CustomAccessTokenMapper] - Config value -------> {CUSTOM_AUTH_CLIENT_CONFIG_ENABLE=true, CUSTOM_AUTH_CLIENT_CONFIG_VALUE=active}
+  [CustomAccessTokenMapper] - Token updated with success
   ```
 
 - E o seguinte token gerado
