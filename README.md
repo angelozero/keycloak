@@ -208,7 +208,7 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   ![09](images/09.png)
   ![10](images/10.png)
   ![11](images/11.png)
-- ![11-5](images/11-5.png)
+  ![11-5](images/11-5.png)
 - **CustomAccessTokenMapper**
   ![12](images/12.png)
   ![13](images/13.png)
@@ -299,7 +299,7 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   ```
 
 - Ao decodificar o token recebemos a seguinte informação do id do usuário registro na base PostgresSQL
-  
+  ![28](images/28.png)
 
 ---
 ## Base de dados PostgresSQL
