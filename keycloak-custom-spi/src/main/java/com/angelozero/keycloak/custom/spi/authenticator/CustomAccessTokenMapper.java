@@ -52,13 +52,13 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
 
 
         if (infoRespone.equalsIgnoreCase("ACTIVE")) {
-            LOGGER.info("[CustomAccessTokenMapper] - Token updated with success");
             var postgresUserId = findUserId(clientSessionCtx.getClientSession().getUserSession().getUser().getEmail());
             OIDCAttributeMapperHelper.mapClaim(token, mappingModel, postgresUserId);
+            LOGGER.info("[CustomAccessTokenMapper] - Token updated with success");
 
         } else {
-            LOGGER.info("[CustomAccessTokenMapper] - Token was not updated");
             OIDCAttributeMapperHelper.mapClaim(token, mappingModel, "no_info_was_found");
+            LOGGER.info("[CustomAccessTokenMapper] - Token was not updated");
         }
     }
 

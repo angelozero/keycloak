@@ -283,17 +283,28 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   [CustomAuthenticator] - PASSWORD ---------------> password
   [CustomAuthenticator] - CONFIG VALUE -----------> active
   [CustomAuthenticator] - CONFIG ENABLE ----------> true
+
   [UserPostgresRepository] - Find user by email: gauss@ldap.forumsys.com
   [UserPostgresRepository] - Getting connection into PostgresSQl database
   [UserPostgresRepository] - User found with success
   [UserPostgresRepository] - ID -------------- 10
   [UserPostgresRepository] - FIRST NAME ------ Carl Friedrich Gauss
   [UserPostgresRepository] - EMAIL ----------- gauss@ldap.forumsys.com
+
   [CustomAuthenticator] - User "gauss" authenticated with success
+
   [CustomAccessTokenMapper] - Custom Access Token Mapper SPI
   [CustomAccessTokenMapper] - Config value -------> {update.profile.on.first.login=missing}
   [CustomAccessTokenMapper] - Config value -------> {require.password.update.after.registration=false}
   [CustomAccessTokenMapper] - Config value -------> {CUSTOM_AUTH_CLIENT_CONFIG_ENABLE=true, CUSTOM_AUTH_CLIENT_CONFIG_VALUE=active}
+
+  [UserPostgresRepository] - Find user by email: gauss@ldap.forumsys.com
+  [UserPostgresRepository] - Getting connection into PostgresSQl database
+  [UserPostgresRepository] - User found with success
+  [UserPostgresRepository] - ID -------------- 10
+  [UserPostgresRepository] - FIRST NAME ------ Carl Friedrich Gauss
+  [UserPostgresRepository] - EMAIL ----------- gauss@ldap.forumsys.com
+
   [CustomAccessTokenMapper] - Token updated with success
   ```
 
