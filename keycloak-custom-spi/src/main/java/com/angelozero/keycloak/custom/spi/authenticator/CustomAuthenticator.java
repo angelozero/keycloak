@@ -15,8 +15,8 @@ public class CustomAuthenticator implements Authenticator {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticator.class);
 
     public static final String CUSTOM_AUTHENTICATOR_PROVIDER_ID = "angelo-zero-custom-authenticator-id";
-    public static final String CUSTOM_CLIENT_MASTER_ID = "CUSTOM_CLIENT_MASTER_ID";
-    public static final String CUSTOM_CLIENT_MASTER_ENABLE = "CUSTOM_CLIENT_MASTER_ENABLE";
+    public static final String CUSTOM_AUTH_CLIENT_CONFIG_VALUE = "CUSTOM_AUTH_CLIENT_CONFIG_VALUE";
+    public static final String CUSTOM_AUTH_CLIENT_CONFIG_ENABLE = "CUSTOM_AUTH_CLIENT_CONFIG_ENABLE";
 
     @Override
     public void authenticate(AuthenticationFlowContext context) {
@@ -25,15 +25,15 @@ public class CustomAuthenticator implements Authenticator {
         var userName = context.getHttpRequest().getDecodedFormParameters().getFirst("username");
         var password = context.getHttpRequest().getDecodedFormParameters().getFirst("password");
         var clientMasterId = context.getAuthenticatorConfig() != null ?
-                context.getAuthenticatorConfig().getConfig().get(CUSTOM_CLIENT_MASTER_ID) : 0;
+                context.getAuthenticatorConfig().getConfig().get(CUSTOM_AUTH_CLIENT_CONFIG_VALUE) : 0;
         var clientMasterEnable = context.getAuthenticatorConfig() != null ?
-                context.getAuthenticatorConfig().getConfig().get(CUSTOM_CLIENT_MASTER_ENABLE) : true;
+                context.getAuthenticatorConfig().getConfig().get(CUSTOM_AUTH_CLIENT_CONFIG_ENABLE) : true;
 
         LOGGER.info("[CustomAuthenticator] - User request data info:");
         LOGGER.info("[CustomAuthenticator] - USERNAME ---------------> {}", userName);
         LOGGER.info("[CustomAuthenticator] - PASSWORD ---------------> {}", password);
-        LOGGER.info("[CustomAuthenticator] - CLIENT_MASTER_ID -------> {}", clientMasterId);
-        LOGGER.info("[CustomAuthenticator] - CLIENT_MASTER_ENABLE ---> {}", clientMasterEnable);
+        LOGGER.info("[CustomAuthenticator] - CONFIG VALUE -----------> {}", clientMasterId);
+        LOGGER.info("[CustomAuthenticator] - CONFIG ENABLE ----------> {}", clientMasterEnable);
 
         if (userName.equals("admin") && password.equals("admin")) {
             LOGGER.info("[CustomAuthenticator] - User ADMIN authenticated with success");

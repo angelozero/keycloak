@@ -58,16 +58,16 @@ public class CustomAuthenticationFactory implements AuthenticatorFactory {
         final List<ProviderConfigProperty> configProperties = new ArrayList<>();
 
         ProviderConfigProperty clientMasterConfig = new ProviderConfigProperty();
-        clientMasterConfig.setName(CustomAuthenticator.CUSTOM_CLIENT_MASTER_ID);
-        clientMasterConfig.setLabel("Client Master ID");
+        clientMasterConfig.setName(CustomAuthenticator.CUSTOM_AUTH_CLIENT_CONFIG_VALUE);
+        clientMasterConfig.setLabel("Config value");
         clientMasterConfig.setType(ProviderConfigProperty.STRING_TYPE);
-        clientMasterConfig.setHelpText("This is an information of the client master id");
+        clientMasterConfig.setHelpText("This is an information to set a token property");
 
         ProviderConfigProperty clientMasterEnableConfig = new ProviderConfigProperty();
-        clientMasterEnableConfig.setName(CustomAuthenticator.CUSTOM_CLIENT_MASTER_ENABLE);
-        clientMasterEnableConfig.setLabel("Client Master enable ?");
+        clientMasterEnableConfig.setName(CustomAuthenticator.CUSTOM_AUTH_CLIENT_CONFIG_ENABLE);
+        clientMasterEnableConfig.setLabel("Config enable");
         clientMasterEnableConfig.setType(ProviderConfigProperty.BOOLEAN_TYPE);
-        clientMasterEnableConfig.setHelpText("his is an information of the client master enable");
+        clientMasterEnableConfig.setHelpText("This is an information to set a token property but it's inactive...");
 
         configProperties.add(clientMasterConfig);
         configProperties.add(clientMasterEnableConfig);

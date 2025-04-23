@@ -1,10 +1,7 @@
 package com.angelozero.keycloak.custom.spi.authenticator;
 
 import com.angelozero.keycloak.custom.spi.authenticator.repository.UserPostgresRepository;
-import org.keycloak.models.ClientSessionContext;
-import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.ProtocolMapperModel;
-import org.keycloak.models.UserSessionModel;
+import org.keycloak.models.*;
 import org.keycloak.protocol.oidc.mappers.*;
 import org.keycloak.provider.ProviderConfigProperty;
 import org.keycloak.representations.IDToken;
@@ -13,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implements OIDCAccessTokenMapper, OIDCIDTokenMapper, UserInfoTokenMapper {
 
@@ -26,6 +24,42 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
     static {
         OIDCAttributeMapperHelper.addTokenClaimNameConfig(configProperties);
         OIDCAttributeMapperHelper.addIncludeInTokensConfig(configProperties, CustomAccessTokenMapper.class);
+    }
+
+    @Override
+    protected void setClaim(IDToken token, ProtocolMapperModel mappingModel, UserSessionModel userSession, KeycloakSession keycloakSession, ClientSessionContext clientSessionCtx) {
+        LOGGER.info("[CustomAccessTokenMapper] - Custom Access Token Mapper SPI");
+
+        var infoRespone = "";
+
+        var realm = clientSessionCtx.getClientSession().getRealm();
+        var authenticatorConfigByList = realm.getAuthenticatorConfigsStream().toList();
+
+        if (!authenticatorConfigByList.isEmpty()) {
+            authenticatorConfigByList.stream()
+                    .filter(Objects::nonNull)
+                    .map(AuthenticatorConfigModel::getConfig)
+                    .forEach(data -> LOGGER.info("[CustomAccessTokenMapper] - Config value -------> {}", data));
+
+            infoRespone = authenticatorConfigByList.stream()
+                    .filter(Objects::nonNull)
+                    .map(AuthenticatorConfigModel::getConfig)
+                    .filter(auth -> auth.get(CustomAuthenticator.CUSTOM_AUTH_CLIENT_CONFIG_VALUE) != null)
+                    .map(auth -> auth.get(CustomAuthenticator.CUSTOM_AUTH_CLIENT_CONFIG_VALUE))
+                    .findFirst()
+                    .orElse("");
+        }
+
+
+        if (infoRespone.equalsIgnoreCase("ACTIVE")) {
+            LOGGER.info("[CustomAccessTokenMapper] - Token updated with success");
+            var postgresUserId = findUserId(clientSessionCtx.getClientSession().getUserSession().getUser().getEmail());
+            OIDCAttributeMapperHelper.mapClaim(token, mappingModel, postgresUserId);
+
+        } else {
+            LOGGER.info("[CustomAccessTokenMapper] - Token was not updated");
+            OIDCAttributeMapperHelper.mapClaim(token, mappingModel, "no_info_was_found");
+        }
     }
 
     @Override
@@ -53,15 +87,6 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
         return CUSTOM_ACCESS_TOKEN_MAPPER_ID;
     }
 
-    @Override
-    protected void setClaim(IDToken token, ProtocolMapperModel mappingModel, UserSessionModel userSession, KeycloakSession keycloakSession, ClientSessionContext clientSessionCtx) {
-        LOGGER.info("[CustomAccessTokenMapper] - Custom Access Token Mapper SPI");
-
-        var postgresUserId = findUserId(clientSessionCtx.getClientSession().getUserSession().getUser().getEmail());
-        OIDCAttributeMapperHelper.mapClaim(token, mappingModel, postgresUserId);
-
-        LOGGER.info("[CustomAccessTokenMapper] - Token updated with success with \"PostgresSQL User ID\": \"{}\"", postgresUserId);
-    }
 
     private Integer findUserId(String email) {
         var repository = UserPostgresRepository.getInstance();
