@@ -221,18 +221,22 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
 ---
 ## Conectando com uma base [LDAP](https://www.forumsys.com/2022/05/10/online-ldap-test-server/)
 - User federation > Add LDAP provider
-  - General options
-    - **Vendor:** Other
-  
-  - Connection and authentication settings
-    - **Connection URL:** ldap://ldap.forumsys.com:389
-    - **Bind DN:** cn=read-only-admin,dc=example,dc=com
-    - **Bind credentials:** password
 
-  - LDAP searching and updating
-    - **Edit mode:** READ_ONLY
-    - **Users DN:** dc=example,dc=com
+  | **General options** | |
+  | --- |-------|
+  | *Vendor* | Other |
+    
+  | **Connection and authentication settings** | |
+  | --- | --- | 
+  | *Connection URL* | ldap://ldap.forumsys.com:389 |
+  | *Bind DN* | cn=read-only-admin,dc=example,dc=com |
+  | *Bind credentials* | password |
 
+  | **LDAP searching and updating** | |
+  | --- | --- |
+  | *Edit mode* |  READ_ONLY |
+  | *Users DN* |  dc=example,dc=com |
+---
   ![19](images/19.png)
   ![20](images/20.png)
 
