@@ -1,4 +1,4 @@
-package com.angelozero.keycloak.custom.spi.authenticator.service;
+package com.angelozero.keycloak.custom.spi.service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

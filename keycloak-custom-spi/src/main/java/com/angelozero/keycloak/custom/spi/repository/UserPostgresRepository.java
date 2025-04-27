@@ -1,8 +1,8 @@
-package com.angelozero.keycloak.custom.spi.authenticator.repository;
+package com.angelozero.keycloak.custom.spi.repository;
 
-import com.angelozero.keycloak.custom.spi.authenticator.dto.User;
-import com.angelozero.keycloak.custom.spi.authenticator.exception.UserRepositoryException;
-import com.angelozero.keycloak.custom.spi.authenticator.service.PasswordService;
+import com.angelozero.keycloak.custom.spi.dto.User;
+import com.angelozero.keycloak.custom.spi.exception.UserRepositoryException;
+import com.angelozero.keycloak.custom.spi.service.PasswordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class UserPostgresRepository {
 
@@ -32,6 +33,7 @@ public class UserPostgresRepository {
                 var id = resultSet.getInt("id");
                 var firstName = resultSet.getString("first_name");
                 var lastName = resultSet.getString("last_name");
+                var interests = Arrays.asList((String[]) resultSet.getArray("interests").getArray());
                 var userEmail = resultSet.getString("email");
                 var userPassword = resultSet.getString("password");
 
@@ -39,8 +41,9 @@ public class UserPostgresRepository {
                 LOGGER.info("[UserPostgresRepository] - ID -------------- {}", id);
                 LOGGER.info("[UserPostgresRepository] - FIRST NAME ------ {}", firstName);
                 LOGGER.info("[UserPostgresRepository] - EMAIL ----------- {}", userEmail);
+                LOGGER.info("[UserPostgresRepository] - INTERESTS ------- {}", interests);
 
-                return new User(id, firstName, lastName, userEmail, userPassword);
+                return new User(id, firstName, lastName, interests, userEmail, userPassword);
             }
 
             LOGGER.info("[UserPostgresRepository] - No User was found with email {}", email);
@@ -56,15 +59,19 @@ public class UserPostgresRepository {
         try {
             var connection = getConnection();
 
-            var statement = connection.prepareStatement("INSERT INTO public.\"USER\" " +
-                    "(id, first_name, last_name, email, \"password\") " +
-                    "VALUES(nextval('\"User_id_seq\"'::regclass), " +
-                    "?, ?, ?, ?)");
+            var interestsArray = connection.createArrayOf("text", user.interests().toArray(new String[0]));
+
+            var statement = connection.prepareStatement("""
+                INSERT INTO public."USER"
+                (id, first_name, last_name, interests, email, "password")
+                VALUES(nextval('"USER_id_seq"'::regclass), ?, ?, ?, ?, ?);
+                """);
 
             statement.setString(1, user.firstName());
             statement.setString(2, user.lastName());
-            statement.setString(3, user.email());
-            statement.setString(4, PasswordService.generateHash(user.password()));
+            statement.setArray(3, interestsArray);
+            statement.setString(4, user.email());
+            statement.setString(5, PasswordService.generateHash(user.password()));
 
             int rowsInserted = statement.executeUpdate();
 

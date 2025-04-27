@@ -1,1 +1,1 @@
-com.angelozero.keycloak.custom.spi.authenticator.CustomAccessTokenMapper
+com.angelozero.keycloak.custom.spi.CustomAccessTokenMapper

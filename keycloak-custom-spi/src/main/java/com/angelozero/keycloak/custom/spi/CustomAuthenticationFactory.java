@@ -1,4 +1,4 @@
-package com.angelozero.keycloak.custom.spi.authenticator;
+package com.angelozero.keycloak.custom.spi;
 
 import org.keycloak.Config;
 import org.keycloak.authentication.Authenticator;
@@ -59,15 +59,15 @@ public class CustomAuthenticationFactory implements AuthenticatorFactory {
 
         ProviderConfigProperty clientMasterConfig = new ProviderConfigProperty();
         clientMasterConfig.setName(CustomAuthenticator.CUSTOM_AUTH_CLIENT_CONFIG_VALUE);
-        clientMasterConfig.setLabel("Config value");
+        clientMasterConfig.setLabel("Object String List Token Attribute - interests_object_list");
         clientMasterConfig.setType(ProviderConfigProperty.STRING_TYPE);
-        clientMasterConfig.setHelpText("This is an information to set a token property");
+        clientMasterConfig.setHelpText("This is an information about an object with a list inside the token");
 
         ProviderConfigProperty clientMasterEnableConfig = new ProviderConfigProperty();
         clientMasterEnableConfig.setName(CustomAuthenticator.CUSTOM_AUTH_CLIENT_CONFIG_ENABLE);
-        clientMasterEnableConfig.setLabel("Config enable");
+        clientMasterEnableConfig.setLabel("String List Token Attribute Name");
         clientMasterEnableConfig.setType(ProviderConfigProperty.BOOLEAN_TYPE);
-        clientMasterEnableConfig.setHelpText("This is an information to set a token property but it's inactive...");
+        clientMasterEnableConfig.setHelpText("This is an information about a string list inside the token");
 
         configProperties.add(clientMasterConfig);
         configProperties.add(clientMasterEnableConfig);

@@ -1,1 +1,1 @@
-com.angelozero.keycloak.custom.spi.authenticator.CustomAuthenticationFactory
+com.angelozero.keycloak.custom.spi.CustomAuthenticationFactory

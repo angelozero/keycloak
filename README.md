@@ -281,52 +281,94 @@ public class CustomAccessTokenMapper extends AbstractOIDCProtocolMapper implemen
   [CustomAuthenticator] - User request data info:
   [CustomAuthenticator] - USERNAME ---------------> gauss
   [CustomAuthenticator] - PASSWORD ---------------> password
-  [CustomAuthenticator] - CONFIG VALUE -----------> active
+  [CustomAuthenticator] - CONFIG VALUE -----------> ACTIVE
   [CustomAuthenticator] - CONFIG ENABLE ----------> true
 
   [UserPostgresRepository] - Find user by email: gauss@ldap.forumsys.com
   [UserPostgresRepository] - Getting connection into PostgresSQl database
   [UserPostgresRepository] - User found with success
-  [UserPostgresRepository] - ID -------------- 10
+  [UserPostgresRepository] - ID -------------- 1
   [UserPostgresRepository] - FIRST NAME ------ Carl Friedrich Gauss
   [UserPostgresRepository] - EMAIL ----------- gauss@ldap.forumsys.com
+  [UserPostgresRepository] - INTERESTS ------- [Tech, Sports, Music]
 
   [CustomAuthenticator] - User "gauss" authenticated with success
 
-  [CustomAccessTokenMapper] - Custom Access Token Mapper SPI
-  [CustomAccessTokenMapper] - Config value -------> {update.profile.on.first.login=missing}
-  [CustomAccessTokenMapper] - Config value -------> {require.password.update.after.registration=false}
-  [CustomAccessTokenMapper] - Config value -------> {CUSTOM_AUTH_CLIENT_CONFIG_ENABLE=true, CUSTOM_AUTH_CLIENT_CONFIG_VALUE=active}
+  [CustomAccessTokenMapper] - Custom Transform Access Token
+  [CustomAccessTokenMapper] - Is enable ? --------> {CUSTOM_AUTH_CLIENT_CONFIG_ENABLE=true, CUSTOM_AUTH_CLIENT_CONFIG_VALUE=ACTIVE}
 
   [UserPostgresRepository] - Find user by email: gauss@ldap.forumsys.com
   [UserPostgresRepository] - Getting connection into PostgresSQl database
   [UserPostgresRepository] - User found with success
-  [UserPostgresRepository] - ID -------------- 10
+  [UserPostgresRepository] - ID -------------- 1
   [UserPostgresRepository] - FIRST NAME ------ Carl Friedrich Gauss
   [UserPostgresRepository] - EMAIL ----------- gauss@ldap.forumsys.com
+  [UserPostgresRepository] - INTERESTS ------- [Tech, Sports, Music]
+
+  [CustomAccessTokenMapper] - Custom Access Token Mapper SPI
+  [CustomAccessTokenMapper] - Config value -------> {CUSTOM_AUTH_CLIENT_CONFIG_ENABLE=true, CUSTOM_AUTH_CLIENT_CONFIG_VALUE=ACTIVE}
+
+  [UserPostgresRepository] - Find user by email: gauss@ldap.forumsys.com
+  [UserPostgresRepository] - Getting connection into PostgresSQl database
+  [UserPostgresRepository] - User found with success
+  [UserPostgresRepository] - ID -------------- 1
+  [UserPostgresRepository] - FIRST NAME ------ Carl Friedrich Gauss
+  [UserPostgresRepository] - EMAIL ----------- gauss@ldap.forumsys.com
+  [UserPostgresRepository] - INTERESTS ------- [Tech, Sports, Music]
 
   [CustomAccessTokenMapper] - Token updated with success
+  [CustomAccessTokenMapper] - Token updated value to interests_string_list with success
   ```
 
 - E o seguinte token gerado
   ```shell
-  eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJuT0JxeVpPbkowNGtWb1hhbEVjZ3BxRUJiV25EakQ4Q0ljb2cyenQ1elQ0In0.eyJleHAiOjE3NDUzNjkwOTYsImlhdCI6MTc0NTM2ODc5NiwiYXV0aF90aW1lIjoxNzQ1MzY4Nzk2LCJqdGkiOiI0NGI4MGYwNS1hMjhhLTQzMDMtOWI5MC1mNzljNThiNTQwMWEiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvcmVhbG1zL2FuZ2Vsby16ZXJvLXJlYWxtIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjIxMTcwZjBmLTU4ZTktNDFlMC1iYWYyLWU0YzRlN2IxNGI2NyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFuZ2Vsby16ZXJvIiwic2lkIjoiNjgzZjVjOTAtZTFjNC00ZjJlLWI4ZTktZWY4ZmU0NTAwYTY5IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWFuZ2Vsby16ZXJvLXJlYWxtIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicG9zdGdyZXNfc3FsX3VzZXJfaWQiOjEwLCJuYW1lIjoiQ2FybCBGcmllZHJpY2ggR2F1c3MgR2F1c3MiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJnYXVzcyIsImdpdmVuX25hbWUiOiJDYXJsIEZyaWVkcmljaCBHYXVzcyIsImZhbWlseV9uYW1lIjoiR2F1c3MiLCJlbWFpbCI6ImdhdXNzQGxkYXAuZm9ydW1zeXMuY29tIn0.Dh5G7alayJAsAFngbSwGxwDYUVDEjjxt0xH1saUZPPCBlvaDl7hepgTDo6EZ9Jmx0j9UVwQB-UYyyO8-Qhic9aZlCIimD_xxkbAjfvUlcneI6uOUXlW_dCeROUnmpruarqZECOdggL4bnDbbLke-Uenca21x1mCP3ypwo3JHr-q05NUlkUY9Xy8HTNmNSmXVa6aEt2L2jqx-aBNC_SBrJs8p0AkBu2dY0zMvuXWV4LFlUevrfo_wSiHVOdi8d-C1ufOEUKCJEE8DzyNhB4-tK4rrN-BnTRNmtf7XiwpKi0EX8KVyIaQYBbPNiEZYxxWmH6XFxLYDhZ0bpePq2kzVEQ
+  eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkam84ZmpnZGtIT29ZVHVNSGkwOXozV2s3aVY2cFd5V0lKSFl6a1hGbTEwIn0.eyJleHAiOjE3NDU3MTY4MDEsImlhdCI6MTc0NTcxNjc0MSwiYXV0aF90aW1lIjoxNzQ1NzE2NzQxLCJqdGkiOiJjNmU4M2M0Mi1iM2JlLTRiMzctOWMwZC04YzY3YjE0ZmY5YjEiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvcmVhbG1zL21hc3RlciIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI0ZDVmODBiZS1mMGU0LTRkY2ItODA1MS1mYzJmZTQ5NjEwM2YiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJ6ZXJvIiwic2lkIjoiODgxZmIyYjAtZGQ2My00Y2IwLTk3OTItMjk3NzAxOWFkOGZiIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImludGVyZXN0c19vYmplY3RfbGlzdCI6eyJ1c2VySW50ZXJlc3RzTGlzdCI6W3siaW50ZXJlc3RzIjoiVGVjaCJ9LHsiaW50ZXJlc3RzIjoiU3BvcnRzIn0seyJpbnRlcmVzdHMiOiJNdXNpYyJ9XX0sIm5hbWUiOiJDYXJsIEZyaWVkcmljaCBHYXVzcyBHYXVzcyIsInByZWZlcnJlZF91c2VybmFtZSI6ImdhdXNzIiwiZ2l2ZW5fbmFtZSI6IkNhcmwgRnJpZWRyaWNoIEdhdXNzIiwiZmFtaWx5X25hbWUiOiJHYXVzcyIsImVtYWlsIjoiZ2F1c3NAbGRhcC5mb3J1bXN5cy5jb20iLCJpbnRlcmVzdHNfc3RyaW5nX2xpc3QiOlsiVGVjaCIsIlNwb3J0cyIsIk11c2ljIl19.ykPA0fZiEsroES8loBZxaaoNnjURfMXIciKGuWReJDpS95WovzVb_eHw9j5a9sDeVA9NG1dqZF9BVcIOo3vGrMJwZiupG1BDIbInITOvzSpOJywK6X6LG_Kp3aW-BlQOdW23EnT86xpIz3cRdG32VNHIS_HWWjdHYnLytRIMrXNad7g1aGiGAB4yxzl92cIAvxgR2jStXvywugZsJhquMJpu_h6I_elb3XbF1-NbvS0MB9m4LwS6UHjh1NsUI3gE3i1gzFF_uLWKde83tZav9033mZ2YbEKTomPEFMJVLIG-CXrjBRRdq0ehG8jn-xVHhl6YZcE-YRxqwYPL4S1aZQ
   ```
 
 - Ao decodificar o token recebemos a seguinte informação do id do usuário registro na base PostgresSQL
-  ![28](images/28.png)
+```json
+{
+    // some values here...
+    "scope": "email profile",
+    "email_verified": false,
+    "interests_object_list": {
+        "userInterestsList": [
+            {
+                "interests": "Tech"
+            },
+            {
+                "interests": "Sports"
+            },
+            {
+                "interests": "Music"
+            }
+        ]
+    },
+    "name": "Carl Friedrich Gauss Gauss",
+    "preferred_username": "gauss",
+    "given_name": "Carl Friedrich Gauss",
+    "family_name": "Gauss",
+    "email": "gauss@ldap.forumsys.com",
+    "interests_string_list": [
+        "Tech",
+        "Sports",
+        "Music"
+    ]
+}
+```
 
 ---
 ## Base de dados PostgresSQL
 - Cria a tabela `USER`
 ```sql
-CREATE TABLE "USER" (
+CREATE TABLE public."USER" (
   id SERIAL PRIMARY KEY,
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
+  interests TEXT[],
   email VARCHAR(100) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL
-);
+  )
 ```
 ---
 ## Extra
@@ -340,6 +382,7 @@ CREATE TABLE "USER" (
 - [Custom Protocol Mapper - by Niko Köbler](https://www.youtube.com/watch?v=5WBb176YqKg)
 - [Baeldung - Custom Protocol Mapper with Keycloak](https://www.baeldung.com/keycloak-custom-protocol-mapper)
 - [GitHub - Keycloak - ScriptBasedOIDCProtocolMapper](https://github.com/keycloak/keycloak/blob/main/services/src/main/java/org/keycloak/protocol/oidc/mappers/ScriptBasedOIDCProtocolMapper.java)
+- [How to Add Custom Claims to JWT Tokens from an External Source in Keycloak](https://medium.com/@pavithbuddhima/how-to-add-custom-claims-to-jwt-tokens-from-an-external-source-in-keycloak-52bd1ff596d3)
 - [Stackoverflow - M1 mac cannot run jboss/keycloak docker image](https://stackoverflow.com/questions/67044893/m1-mac-cannot-run-jboss-keycloak-docker-image)
   ```shell
   //to run on a MacOs Sonoma 14.2.1 Apple M1 add "--platform=linux/amd64"

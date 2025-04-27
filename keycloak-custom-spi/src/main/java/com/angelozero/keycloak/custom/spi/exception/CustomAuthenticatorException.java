@@ -1,4 +1,4 @@
-package com.angelozero.keycloak.custom.spi.authenticator.exception;
+package com.angelozero.keycloak.custom.spi.exception;
 
 public class CustomAuthenticatorException extends RuntimeException {
 

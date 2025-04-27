@@ -1,8 +1,8 @@
-package com.angelozero.keycloak.custom.spi.authenticator;
+package com.angelozero.keycloak.custom.spi;
 
-import com.angelozero.keycloak.custom.spi.authenticator.dto.User;
-import com.angelozero.keycloak.custom.spi.authenticator.exception.CustomAuthenticatorException;
-import com.angelozero.keycloak.custom.spi.authenticator.repository.UserPostgresRepository;
+import com.angelozero.keycloak.custom.spi.dto.User;
+import com.angelozero.keycloak.custom.spi.exception.CustomAuthenticatorException;
+import com.angelozero.keycloak.custom.spi.repository.UserPostgresRepository;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.models.KeycloakSession;
@@ -10,6 +10,8 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 public class CustomAuthenticator implements Authenticator {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticator.class);
@@ -48,35 +50,6 @@ public class CustomAuthenticator implements Authenticator {
         context.success();
     }
 
-    private void saveUser(UserModel userModel, String email, String password) {
-        var repository = UserPostgresRepository.getInstance();
-        var userFound = repository.findByEmail(email);
-
-        if (userFound == null) {
-            var user = new User(null, userModel.getFirstName(), userModel.getLastName(), email, password);
-            repository.save(user);
-        }
-    }
-
-    private UserModel findUserModel(AuthenticationFlowContext context, String username) {
-        UserModel userModel;
-
-        var realm = context.getSession().getContext().getRealm();
-
-        userModel = context.getSession().users().getUserByUsername(realm, username);
-
-        if (userModel == null) {
-            userModel = context.getSession().users().getUserByEmail(realm, username);
-        }
-
-        if (userModel == null) {
-            LOGGER.error("[CustomAuthenticator] - User Model by info \"{}\" was not found", username);
-            throw new CustomAuthenticatorException("User Model by info \"" + username + "\" was not found");
-        }
-
-        return userModel;
-    }
-
     @Override
     public void action(AuthenticationFlowContext context) {
     }
@@ -99,5 +72,40 @@ public class CustomAuthenticator implements Authenticator {
     @Override
     public void close() {
 
+    }
+
+    private void saveUser(UserModel userModel, String email, String password) {
+        var repository = UserPostgresRepository.getInstance();
+        var userFound = repository.findByEmail(email);
+
+        if (userFound == null) {
+            var user = new User(null,
+                    userModel.getFirstName(),
+                    userModel.getLastName(),
+                    Arrays.asList("Tech", "Sports", "Music"),
+                    email,
+                    password);
+
+            repository.save(user);
+        }
+    }
+
+    private UserModel findUserModel(AuthenticationFlowContext context, String username) {
+        UserModel userModel;
+
+        var realm = context.getSession().getContext().getRealm();
+
+        userModel = context.getSession().users().getUserByUsername(realm, username);
+
+        if (userModel == null) {
+            userModel = context.getSession().users().getUserByEmail(realm, username);
+        }
+
+        if (userModel == null) {
+            LOGGER.error("[CustomAuthenticator] - User Model by info \"{}\" was not found", username);
+            throw new CustomAuthenticatorException("User Model by info \"" + username + "\" was not found");
+        }
+
+        return userModel;
     }
 }
